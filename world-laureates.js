@@ -1,3 +1,48 @@
+var RenderLaureatesBubbles = function(settings,svg) {
+  this.settings = settings;
+  this.svg = svg;
+}
+
+RenderLaureatesBubbles.prototype = {
+
+  createCircles : function(data,radius){
+    var circle = g.selectAll("circle")
+          .data(data);
+
+    circle.exit().remove();
+
+    circle.enter().append("circle")
+      .attr("r", radius)
+      .attr("class", "bubble");
+    
+    circle
+      .attr("cx", function(d) { return d.lon; })
+      .attr("cy", function(d) { return d.lat; });
+    circle
+      .append("title")
+      .text(function(d) { return "Born City: "+ d.bornCity+ "\n"
+                                  + "Gender: "+ d.gender+ "\n"
+                                  + "Number Of Prizes: "+ d.numberOfPrizes+ "\n"
+                                  + "Prize: "+ d.prize; });
+
+    return circle;
+  },
+
+  render : function(data,scale){
+    svg.selectAll("circle").remove();
+    if(data != null){
+      if(scale < 3 || scale == null || scale == undefined){
+        this.createCircles(data,5);
+      } else {
+        this.createCircles(data,0.5);
+      }
+    }
+
+  }
+
+
+};
+
 var maleOrFemaleChart = dc.pieChart('#male-female-chart');
 var dayOfWeekChart = dc.rowChart('#day-of-week-chart');
 var monthChart = dc.barChart('#month-chart');
@@ -5,7 +50,8 @@ var prizeChart = dc.rowChart('#prize-chart');
 
 var width = 1300,
     height = 500,
-    active = d3.select(null);
+    active = d3.select(null),
+    bubbleCoordinates = null;
 
 var projection = d3.geo.equirectangular()
     .scale(200)
@@ -33,13 +79,10 @@ svg.append("rect")
 
 var g = svg.append("g");
 
-var worldChart = dc.bubbleOverlay("#world-map")
-                  .svg(d3.select("#world-map svg g"));
-
 var zoom = d3.behavior.zoom()
     .translate([0, 0])
     .scale(1)
-    .scaleExtent([1, 8])
+    .scaleExtent([1, 12])
     .on("zoom", zoomed);
 
 svg
@@ -114,7 +157,6 @@ d3.json("/data/world-50m.json", function(error, world) {
     var numberOfLaureatesPerCity = bornCityGroup.size();
     var maxNumberOfLaureatesPerCity = bornCityGroup.top(1)[0].value;
     var minNumberOfLaureatesPerCity = bornCityGroup.top(Infinity)[numberOfLaureatesPerCity-1].value;
-    console.log(minNumberOfLaureatesPerCity,maxNumberOfLaureatesPerCity);
     
     var prize = laureates.dimension(function(d){
       return d.prize;
@@ -207,37 +249,18 @@ d3.json("/data/world-50m.json", function(error, world) {
         .round(d3.time.month.round)
         .alwaysUseRounding(true)
         .xUnits(d3.time.months);
-
-    worldChart
-        .width(width)
-        .height(height)
-        .dimension(bornCity)
-        .group(bornCityGroup)
-        .radiusValueAccessor(function(p) {
-            return p.value;
-        })
-        .minRadiusWithLabel(1)
-        .r(d3.scale.linear().domain([0,100000000]))
-        .colors(["#ff7373","#ff4040","#ff0000","#bf3030","#a60000"])
-        .colorDomain([13, 30])
-        .colorAccessor(function(p) {
-            return p.value;
-        })
-        .title(function(p) {
-            return "City: " + p.key + "\n" +
-                   "laureates: " + p.value;
-        })
-        .label(function(p){
-          return p.value;
-        });
                 
-
+    bubbleCoordinates = []
     data.forEach(function(laureate){
       var coordinates = projection([laureate.bornCityLatLon[1],laureate.bornCityLatLon[0]]);
-      if(coordinates !== null){
-        worldChart.point(laureate.bornCity, coordinates[0], coordinates[1]);
-      }
+      bubbleCoordinates.push({"lon": coordinates[0], 
+        "lat" : coordinates[1], 
+        "bornCity" : laureate.bornCity, 
+        "gender" : laureate.gender, 
+        "numberOfPrizes" : laureate.numberOfPrizes, 
+        "prize" : laureate.prize});
     });
+    
     dc.renderAll();
     
   });
@@ -273,6 +296,11 @@ function reset() {
 function zoomed() {
   g.style("stroke-width", 1.5 / d3.event.scale + "px");
   g.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+
+  var settings = {};
+  var renderLaureateBubbles = new RenderLaureatesBubbles(settings,g);
+  renderLaureateBubbles.render(bubbleCoordinates,d3.event.scale);
+
 }
 
 // If the drag behavior prevents the default click,
