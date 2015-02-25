@@ -5,7 +5,7 @@ var RenderLaureatesBubbles = function(settings,svg) {
 
 RenderLaureatesBubbles.prototype = {
 
-  createCircles : function(data,radius){
+  createCircles : function(data,radius,textFn){
     var circle = g.selectAll("circle")
           .data(data);
 
@@ -13,34 +13,69 @@ RenderLaureatesBubbles.prototype = {
 
     circle.enter().append("circle")
       .attr("r", radius)
-      .attr("class", "bubble");
+      .attr("class", "bubble")
+      .text(function(d) { return d.nLaureates;});
     
     circle
       .attr("cx", function(d) { return d.lon; })
       .attr("cy", function(d) { return d.lat; });
+      
     circle
       .append("title")
-      .text(function(d) { return "Born City: "+ d.bornCity+ "\n"
-                                  + "Gender: "+ d.gender+ "\n"
-                                  + "Number Of Prizes: "+ d.numberOfPrizes+ "\n"
-                                  + "Prize: "+ d.prize; });
+      .text(textFn);
 
     return circle;
   },
 
-  render : function(data,scale){
+  render : function(datasets,scale){
     svg.selectAll("circle").remove();
-    if(data != null){
-      if(scale < 3 || scale == null || scale == undefined){
-        this.createCircles(data,5);
+    if(datasets != null){
+      if(scale < 7 || scale == null || scale == undefined){
+        if(scale >= 1 && scale < 2){
+          this.createCircles(datasets.countries,5,this.countryText);
+        } else if(scale >= 2 && scale < 3) {
+          this.createCircles(datasets.countries,3,this.countryText);
+        } else if(scale >= 3 && scale < 4) {
+          this.createCircles(datasets.countries,2,this.countryText);
+        } else if(scale >= 4 && scale < 7) {
+          this.createCircles(datasets.countries,1,this.countryText);
+        }
       } else {
-        this.createCircles(data,0.5);
+        if(scale >= 7 && scale < 11){
+          this.createCircles(datasets.cities,0.5,this.cityText);
+        } else {
+          this.createCircles(datasets.cities,0.3,this.cityText);
+        }
       }
     }
+  },
 
+  cityText : function(laureateGroup){
+    return "Born City: "+ laureateGroup.groupKey+ "\n"
+            + "Number of Laureates: "+ laureateGroup.nLaureates; 
+  },
+
+  countryText : function(laureateGroup){
+    return "Born Country: "+ laureateGroup.groupKey+ "\n"
+            + "Number of Laureates: "+ laureateGroup.nLaureates; 
   }
 
+};
 
+function setDataForGroup(data,laureate,groups,groupKey,latLonKey){
+  var group = laureate[groupKey]
+  groups.push(group);
+  if(!(group in data)){
+    var coordinates = projection([laureate[latLonKey][1],laureate[latLonKey][0]]);
+    data[group] = {
+      "lon": coordinates[0], 
+      "lat" : coordinates[1],
+      groupKey : group,
+      "nLaureates" : 1
+    }
+  } else {
+    data[group].nLaureates += 1;
+  }
 };
 
 var maleOrFemaleChart = dc.pieChart('#male-female-chart');
@@ -51,7 +86,7 @@ var prizeChart = dc.rowChart('#prize-chart');
 var width = 1300,
     height = 500,
     active = d3.select(null),
-    bubbleCoordinates = null;
+    datasets = null;
 
 var projection = d3.geo.equirectangular()
     .scale(200)
@@ -102,7 +137,7 @@ d3.json("/data/world-50m.json", function(error, world) {
       .attr("class", "border border--state")
       .attr("d", path);
 
-  d3.json("/data/laureates-cities-world.json", function(error, data) {
+  d3.json("/data/laureates-world.json", function(error, data) {
     
     var dateFormat = d3.time.format('%Y-%m-%d');
     var numberFormat = d3.format('.2f');
@@ -250,16 +285,32 @@ d3.json("/data/world-50m.json", function(error, world) {
         .alwaysUseRounding(true)
         .xUnits(d3.time.months);
                 
-    bubbleCoordinates = []
-    data.forEach(function(laureate){
-      var coordinates = projection([laureate.bornCityLatLon[1],laureate.bornCityLatLon[0]]);
-      bubbleCoordinates.push({"lon": coordinates[0], 
-        "lat" : coordinates[1], 
-        "bornCity" : laureate.bornCity, 
-        "gender" : laureate.gender, 
-        "numberOfPrizes" : laureate.numberOfPrizes, 
-        "prize" : laureate.prize});
+    
+    var laureates = Rx.Observable.from(data);
+    var laureatesByCity = {}
+    var cities = [];
+    var laureatesByCountry = {}
+    var countries = [];
+    laureates.subscribe(function(laureate){
+      setDataForGroup(laureatesByCity,laureate,cities,"bornCity","bornCityLatLon");
+      setDataForGroup(laureatesByCountry,laureate,countries,"bornCountryCode","bornCountryLatLon");
     });
+
+    bubbleCityCoordinates = [];
+    var citiesObs = Rx.Observable.from(cities);
+    citiesObs.subscribe(function(city){
+      bubbleCityCoordinates.push(laureatesByCity[city]);
+    });
+    
+    bubbleCountyCoordinates = [];
+    var countriesObs = Rx.Observable.from(countries);
+    countriesObs.subscribe(function(country){
+      bubbleCountyCoordinates.push(laureatesByCountry[country]);
+    });
+
+    datasets = { countries : bubbleCountyCoordinates,
+                cities : bubbleCityCoordinates
+    }
     
     dc.renderAll();
     
@@ -299,7 +350,7 @@ function zoomed() {
 
   var settings = {};
   var renderLaureateBubbles = new RenderLaureatesBubbles(settings,g);
-  renderLaureateBubbles.render(bubbleCoordinates,d3.event.scale);
+  renderLaureateBubbles.render(datasets,d3.event.scale);
 
 }
 
