@@ -12,7 +12,8 @@ requirejs.config({
         'colorbrewer': '/bower_components/colorbrewer/colorbrewer',
         'dc': '/lib/dc',
         'topojson': '/lib/topojson',
-        'bubbleOverlay': 'app/modules/bubbles/bubbleOverlay',
+        'bubbleOverlay': '/app/modules/bubbles/bubbleOverlay',
+        'bubbleOverlayHelpers': '/app/modules/bubbles/helpers',
         'print': '/lib/print'
     },
   	shim: {

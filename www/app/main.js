@@ -5,8 +5,8 @@ define(function (require) {
   var d3 = require('d3');
   var crossfilter = require('crossfilter');
   var topojson = require('topojson');
-  var bubbleOverlay  = require('app/modules/bubbles/bubbleOverlay');
-  var bubbleHelpers = require('app/modules/bubbles/helpers');
+  var bubbleOverlay  = require('bubbleOverlay');
+  var bubbleHelpers = require('bubbleOverlayHelpers');
 
   var maleOrFemaleChart = dc.pieChart('#male-female-chart');
   var dayOfWeekChart = dc.rowChart('#day-of-week-chart');
