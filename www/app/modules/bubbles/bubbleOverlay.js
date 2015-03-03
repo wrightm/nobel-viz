@@ -8,7 +8,7 @@ define(function () {
     BubbleOverlay.prototype = {
 
       createCircles : function(data,radius,textFn){
-        var circle = g.selectAll("circle")
+        var circle = this.svg.selectAll("circle")
               .data(data);
 
         circle.exit().remove();
@@ -65,6 +65,37 @@ define(function () {
     };
 
     return BubbleOverlay;
+});
+
+define(function(){
+
+  var worldChart = dc.bubbleOverlay("#world-map").svg(d3.select("#world-map svg g"));
+  worldChart
+        .width(width)
+        .height(height)
+        .dimension(bornCity)
+        .group(bornCityGroup)
+        .radiusValueAccessor(function(p) {
+            return p.value;
+        })
+        .minRadiusWithLabel(1)
+        .r(d3.scale.linear().domain([0,100000000]))
+        .colors(["#ff7373","#ff4040","#ff0000","#bf3030","#a60000"])
+        .colorDomain([13, 30])
+        .colorAccessor(function(p) {
+            return p.value;
+        })
+        .title(function(p) {
+            return "City: " + p.key + "\n" +
+                   "laureates: " + p.value;
+        })
+        .label(function(p){
+          return p.value;
+        });
+
+        worldChart.point(laureate.bornCity, coordinates[0], coordinates[1]);
+
+
 });
 
 

@@ -8,10 +8,6 @@ define(function (require) {
   var bubbleOverlay  = require('bubbleOverlay');
   var bubbleHelpers = require('bubbleOverlayHelpers');
 
-  var maleOrFemaleChart = dc.pieChart('#male-female-chart');
-  var dayOfWeekChart = dc.rowChart('#day-of-week-chart');
-  var monthChart = dc.barChart('#month-chart');
-  var prizeChart = dc.rowChart('#prize-chart');
 
   var width = 1300,
       height = 500,
@@ -53,6 +49,13 @@ define(function (require) {
   svg
       .call(zoom) // delete this line to disable free zooming
       .call(zoom.event);
+
+
+  var maleOrFemaleChart = dc.pieChart('#male-female-chart');
+  var dayOfWeekChart = dc.rowChart('#day-of-week-chart');
+  var monthChart = dc.barChart('#month-chart');
+  var prizeChart = dc.rowChart('#prize-chart');
+  var worldChart = dc.bubbleOverlay("#world-map").svg(d3.select("#world-map svg g"));
 
   d3.json("/data/world-50m.json", function(error, world) {
     g.selectAll("path")
@@ -119,9 +122,6 @@ define(function (require) {
       });
 
       var bornCityGroup = bornCity.group();
-      var numberOfLaureatesPerCity = bornCityGroup.size();
-      var maxNumberOfLaureatesPerCity = bornCityGroup.top(1)[0].value;
-      var minNumberOfLaureatesPerCity = bornCityGroup.top(Infinity)[numberOfLaureatesPerCity-1].value;
       
       var prize = laureates.dimension(function(d){
         return d.prize;
@@ -214,34 +214,39 @@ define(function (require) {
           .round(d3.time.month.round)
           .alwaysUseRounding(true)
           .xUnits(d3.time.months);
+
+
+      worldChart
+        .width(width)
+        .height(height)
+        .dimension(bornCity)
+        .group(bornCityGroup)
+        .radiusValueAccessor(function(p) {
+            return p.value;
+        })
+        .minRadiusWithLabel(1)
+        .r(d3.scale.linear().domain([0,100000000]))
+        .colors(["#ff7373","#ff4040","#ff0000","#bf3030","#a60000"])
+        .colorDomain([13, 30])
+        .colorAccessor(function(p) {
+            return p.value;
+        })
+        .title(function(p) {
+            return "City: " + p.key + "\n" +
+                   "laureates: " + p.value;
+        })
+        .label(function(p){
+          return p.value;
+        });
                   
       
-      var laureates = Rx.Observable.from(data);
-      var laureatesByCity = {}
-      var cities = [];
-      var laureatesByCountry = {}
-      var countries = [];
-    
-      laureates.subscribe(function(laureate){
-        bubbleHelpers.setDataForGroup(laureatesByCity,laureate,cities,"bornCity","bornCityLatLon");
-        bubbleHelpers.setDataForGroup(laureatesByCountry,laureate,countries,"bornCountryCode","bornCountryLatLon");
+      data.forEach(function(laureate){
+        var coordinates = projection([laureate.bornCityLatLon[1],laureate.bornCityLatLon[0]]);
+        if(coordinates !== null){
+          worldChart.point(laureate.bornCity, coordinates[0], coordinates[1]);
+        }
       });
       
-      bubbleCityCoordinates = [];
-      var citiesObs = Rx.Observable.from(cities);
-      citiesObs.subscribe(function(city){
-        bubbleCityCoordinates.push(laureatesByCity[city]);
-      });
-    
-      bubbleCountyCoordinates = [];
-      var countriesObs = Rx.Observable.from(countries);
-      countriesObs.subscribe(function(country){
-        bubbleCountyCoordinates.push(laureatesByCountry[country]);
-      });
-    
-      datasets = { countries : bubbleCountyCoordinates,
-                  cities : bubbleCityCoordinates
-      }
       
       dc.renderAll();
       
@@ -278,10 +283,6 @@ define(function (require) {
   function zoomed() {
     g.style("stroke-width", 1.5 / d3.event.scale + "px");
     g.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
-
-    var settings = {};
-    var renderLaureateBubbles = new bubbleOverlay(settings,g);
-    renderLaureateBubbles.render(datasets,d3.event.scale);
 
   }
 

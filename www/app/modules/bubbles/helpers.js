@@ -1,7 +1,7 @@
 
 define(function () {
   return {
-    setDataForGroup : function(data,laureate,groups,groupKey,latLonKey){
+    setDataForGroup : function(projection,data,laureate,groups,groupKey,latLonKey){
       var group = laureate[groupKey]
       groups.push(group);
       if(!(group in data)){
