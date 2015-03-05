@@ -6,9 +6,7 @@ define(function (require) {
   var crossfilter = require('crossfilter');
   var topojson = require('topojson');
   var bubbleOverlay  = require('bubbleOverlay');
-  var bubbleHelpers = require('bubbleOverlayHelpers');
-
-
+  
   var width = 1300,
       height = 500,
       active = d3.select(null),
@@ -56,6 +54,7 @@ define(function (require) {
   var monthChart = dc.barChart('#month-chart');
   var prizeChart = dc.rowChart('#prize-chart');
   var worldChart = dc.bubbleOverlay("#world-map").svg(d3.select("#world-map svg g"));
+  var bubbleOverlayData = {};
 
   d3.json("/data/world-50m.json", function(error, world) {
     g.selectAll("path")
@@ -117,17 +116,57 @@ define(function (require) {
       });
       var dayOfWeekGroup = dayOfWeek.group();
       
-      var bornCity =  laureates.dimension(function (d) {
-        return d.bornCity;
-      });
-
-      var bornCityGroup = bornCity.group();
-      
       var prize = laureates.dimension(function(d){
         return d.prize;
       });
 
       var prizeGroup = prize.group();
+
+      var bornCity =  laureates.dimension(function (d) {
+        return d.bornCity;
+      });
+      var bornCityGroup = bornCity.group();
+      
+      var bornCountry = laureates.dimension(function(d){
+        return d.bornCountryCode;
+      });
+      var bornCountryGroup = bornCountry.group();
+
+      var bornContinent = laureates.dimension(function(d){
+        return d.bornContinent;
+      });
+      var bornContinentGroup = bornContinent.group();
+
+      var bornCountryPoints = [];
+      var bornCityPoints = [];
+      var bornContinentPoints = []
+      data.forEach(function(laureate){
+        var bornCityCoordinates = projection([laureate.bornCityLatLon[1],laureate.bornCityLatLon[0]]);
+        if(bornCityCoordinates !== null){
+          bornCityPoints.push({name:laureate.bornCity, x:bornCityCoordinates[0], y:bornCityCoordinates[1]});
+        }
+        var bornCountryCoordinates = projection([laureate.bornCountryLatLon[1],laureate.bornCountryLatLon[0]]);
+        if(bornCountryCoordinates !== null){
+          bornCountryPoints.push({name:laureate.bornCountryCode, x:bornCountryCoordinates[0], y:bornCountryCoordinates[1]});
+        }
+        var bornContinentCoordinates = projection([laureate.bornContinentLatLon[1],laureate.bornContinentLatLon[0]]);
+        if(bornContinentCoordinates !== null){
+          bornContinentPoints.push({name:laureate.bornContinent, x:bornContinentCoordinates[0], y:bornContinentCoordinates[1]});
+        }
+      });
+
+      bubbleOverlayData.cityDimension = bornCity;
+      bubbleOverlayData.cityGroup = bornCityGroup;
+      bubbleOverlayData.cityPoints = bornCityPoints;
+      bubbleOverlayData.countryDimension = bornCountry;
+      bubbleOverlayData.countryGroup = bornCountryGroup;
+      bubbleOverlayData.countryPoints = bornCountryPoints;
+      bubbleOverlayData.continentDimension = bornContinent;
+      bubbleOverlayData.continentGroup = bornContinentGroup;
+      bubbleOverlayData.continentPoints = bornContinentPoints;
+
+      var overlay = new bubbleOverlay(worldChart,bubbleOverlayData);
+      overlay.render(1);
 
       // count all the facts
       dc.dataCount(".dc-data-count")
@@ -163,7 +202,8 @@ define(function (require) {
           // (optional) define color domain to match your data domain if you want to bind data or color
           .colorDomain([-1750, 1644])
           // (optional) define color value accessor
-          .colorAccessor(function(d, i){return d.value;});
+          .colorAccessor(function(d, i){return d.value;})
+          .render();
       
       dayOfWeekChart
           .width(180)
@@ -182,6 +222,7 @@ define(function (require) {
           })
           .elasticX(true)
           .xAxis().ticks(4);
+      dayOfWeekChart.render();
 
 
       prizeChart
@@ -201,6 +242,7 @@ define(function (require) {
           })
           .elasticX(true)
           .xAxis().ticks(4);
+      prizeChart.render();
 
       monthChart
           .width(990)
@@ -214,41 +256,7 @@ define(function (require) {
           .round(d3.time.month.round)
           .alwaysUseRounding(true)
           .xUnits(d3.time.months);
-
-
-      worldChart
-        .width(width)
-        .height(height)
-        .dimension(bornCity)
-        .group(bornCityGroup)
-        .radiusValueAccessor(function(p) {
-            return p.value;
-        })
-        .minRadiusWithLabel(1)
-        .r(d3.scale.linear().domain([0,100000000]))
-        .colors(["#ff7373","#ff4040","#ff0000","#bf3030","#a60000"])
-        .colorDomain([13, 30])
-        .colorAccessor(function(p) {
-            return p.value;
-        })
-        .title(function(p) {
-            return "City: " + p.key + "\n" +
-                   "laureates: " + p.value;
-        })
-        .label(function(p){
-          return p.value;
-        });
-                  
-      
-      data.forEach(function(laureate){
-        var coordinates = projection([laureate.bornCityLatLon[1],laureate.bornCityLatLon[0]]);
-        if(coordinates !== null){
-          worldChart.point(laureate.bornCity, coordinates[0], coordinates[1]);
-        }
-      });
-      
-      
-      dc.renderAll();
+      monthChart.render();
       
     });
   });
@@ -283,6 +291,11 @@ define(function (require) {
   function zoomed() {
     g.style("stroke-width", 1.5 / d3.event.scale + "px");
     g.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+
+    if(bubbleOverlayData){
+      var overlay = new bubbleOverlay(worldChart,bubbleOverlayData);
+      overlay.render(d3.event.scale);
+    }
 
   }
 

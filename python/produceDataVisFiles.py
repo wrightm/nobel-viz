@@ -17,7 +17,6 @@ def get_geolocation_of_location(location):
 
 	try:
                 geo_location_url = "http://nominatim.openstreetmap.org/search?q="+location+"&format=json&limit=1"
-                print geo_location_url
                 geo_location_info = json.loads(urllib2.urlopen(geo_location_url).read())
 		if len(geo_location_info) == 1:
 			return geo_location_info[0]["lat"],geo_location_info[0]["lon"]
@@ -39,15 +38,15 @@ def make_laureates_outputfile(laureate_filename, continent_filename, output_file
                         if countrylat == "NaN" or countrylon == "NaN":
                                 continue
                         continent = json_continent.get(country,None)
-                        print continent, country
                         continentlat, continentlon = get_geolocation_of_location(continent)
                         city = laureate["bornCity"].split(',')[0]
-                        citylat, citylon = get_geolocation_of_location(city+" "+country)
+                        citylat, citylon = get_geolocation_of_location(city+"%20"+country)
                         if citylat == "NaN" or citylon == "NaN":
                                 continue
                         n_laureates.append({"born": laureate["born"],
                                             "bornCountryCode": laureate["bornCountryCode"],
                                             "bornCity": city,
+                                            "bornContinent": continent,
                                             "gender": laureate["gender"],
                                             "bornCityLatLon": [citylat,citylon],
                                             "bornCountryLatLon": [countrylat,countrylon],

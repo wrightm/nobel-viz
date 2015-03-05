@@ -6648,6 +6648,28 @@ dc.bubbleOverlay = function (root, chartGroup) {
         return _chart;
     };
 
+    _chart.deletePoints = function(){
+        _points = [];
+        return _chart;
+    };
+
+    _chart.removeCircles = function(){
+        _chart.svg().selectAll('circle').remove();
+    };
+
+    _chart.addPoints = function(points){
+        _points = points;
+        if(_points.length < 1){
+            throw "There must be at least one point";
+        }
+        _points.forEach(function(point){
+            if(!("name" in point) || !("x" in point) || !("y" in point)){
+                throw "All points must be of type {name: name, x: x, y: y}";
+            }
+        });
+        return _chart;
+    };
+
     _chart._doRender = function () {
         _g = initOverlayG();
 

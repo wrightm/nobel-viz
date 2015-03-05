@@ -1,102 +1,113 @@
 
 define(function () {
-    function BubbleOverlay(settings,svg) {
-      this.settings = settings;
-      this.svg = svg;
+
+    var lastState = "";
+
+    function modifyBubbleOverlay(currentState,worldChart,dimension,group,points,width,height,message){
+      if(lastState != currentState){
+        worldChart.removeCircles();
+        worldChart
+          .deletePoints()
+          .addPoints(points)
+          .width(width)
+          .height(height)
+          .dimension(dimension)
+          .group(group)
+          .radiusValueAccessor(function(p) {
+              return p.value;
+          })
+          .colors(["#ff7373","#ff4040","#ff0000","#bf3030","#a60000"])
+          .colorDomain([13, 30])
+          .colorAccessor(function(p) {
+              return p.value;
+          })
+          .title(function(p) {
+              return message +": "+ p.key + "\n" +
+                     "laureates: " + p.value;
+          })
+          .label(function(p){
+            return p.value;
+          });
+          worldChart.render().redraw();
+      }
+      lastState = currentState;
+    }
+
+    function BubbleOverlay(worldChart,datasets) {
+      this.worldChart = worldChart;
+      this.cityDimension = datasets.cityDimension;
+      this.cityGroup = datasets.cityGroup;
+      this.cityPoints = datasets.cityPoints;
+      this.countryDimension = datasets.countryDimension;
+      this.countryGroup = datasets.countryGroup;
+      this.countryPoints = datasets.countryPoints;
+      this.continentDimension = datasets.continentDimension;
+      this.continentGroup = datasets.continentGroup;
+      this.continentPoints = datasets.continentPoints;
     };
 
     BubbleOverlay.prototype = {
 
-      createCircles : function(data,radius,textFn){
-        var circle = this.svg.selectAll("circle")
-              .data(data);
-
-        circle.exit().remove();
-
-        circle.enter().append("circle")
-          .attr("r", radius)
-          .attr("class", "bubble")
-          .text(function(d) { return d.nLaureates;});
-        
-        circle
-          .attr("cx", function(d) { return d.lon; })
-          .attr("cy", function(d) { return d.lat; });
-          
-        circle
-          .append("title")
-          .text(textFn);
-
-        return circle;
-      },
-
-      render : function(datasets,scale){
-        this.svg.selectAll("circle").remove();
-        if(datasets != null){
+      render : function(scale){
+          console.log(scale)
           if(scale < 7 || scale == null || scale == undefined){
-            if(scale >= 1 && scale < 2){
-              this.createCircles(datasets.countries,5,this.countryText);
-            } else if(scale >= 2 && scale < 3) {
-              this.createCircles(datasets.countries,3,this.countryText);
+            if(scale >= 1 && scale < 1.5){
+              modifyBubbleOverlay("Continent",this.worldChart,
+                this.continentDimension,
+                this.continentGroup,
+                this.continentPoints,
+                50,
+                50,
+                "Continent");
+            } else if(scale >= 1.5 && scale < 3) {
+              modifyBubbleOverlay("CountryLarge",this.worldChart,
+                this.countryDimension,
+                this.countryGroup,
+                this.countryPoints,
+                10,
+                20,
+                "Country");
             } else if(scale >= 3 && scale < 4) {
-              this.createCircles(datasets.countries,2,this.countryText);
+              modifyBubbleOverlay("CountryMedium",this.worldChart,
+                this.countryDimension,
+                this.countryGroup,
+                this.countryPoints,
+                10,
+                20,
+                "Country");
             } else if(scale >= 4 && scale < 7) {
-              this.createCircles(datasets.countries,1,this.countryText);
+              modifyBubbleOverlay("CountrySmall",this.worldChart,
+                this.countryDimension,
+                this.countryGroup,
+                this.countryPoints,
+                10,
+                20,
+                "Country");
             }
           } else {
             if(scale >= 7 && scale < 11){
-              this.createCircles(datasets.cities,0.5,this.cityText);
+              modifyBubbleOverlay("CityLarge",this.worldChart,
+                this.cityDimension,
+                this.cityGroup,
+                this.cityPoints,
+                10,
+                20,
+                "City");
             } else {
-              this.createCircles(datasets.cities,0.3,this.cityText);
+              modifyBubbleOverlay("CityMedium",this.worldChart,
+                this.cityDimension,
+                this.cityGroup,
+                this.cityPoints,
+                10,
+                20,
+                "City");
             }
           }
-        }
-      },
-
-      cityText : function(laureateGroup){
-        return "Born City: "+ laureateGroup.groupKey+ "\n"
-                + "Number of Laureates: "+ laureateGroup.nLaureates; 
-      },
-
-      countryText : function(laureateGroup){
-        return "Born Country: "+ laureateGroup.groupKey+ "\n"
-                + "Number of Laureates: "+ laureateGroup.nLaureates; 
       }
 
     };
 
     return BubbleOverlay;
 });
-
-define(function(){
-
-  var worldChart = dc.bubbleOverlay("#world-map").svg(d3.select("#world-map svg g"));
-  worldChart
-        .width(width)
-        .height(height)
-        .dimension(bornCity)
-        .group(bornCityGroup)
-        .radiusValueAccessor(function(p) {
-            return p.value;
-        })
-        .minRadiusWithLabel(1)
-        .r(d3.scale.linear().domain([0,100000000]))
-        .colors(["#ff7373","#ff4040","#ff0000","#bf3030","#a60000"])
-        .colorDomain([13, 30])
-        .colorAccessor(function(p) {
-            return p.value;
-        })
-        .title(function(p) {
-            return "City: " + p.key + "\n" +
-                   "laureates: " + p.value;
-        })
-        .label(function(p){
-          return p.value;
-        });
-
-        worldChart.point(laureate.bornCity, coordinates[0], coordinates[1]);
-
-
-});
-
 
 
