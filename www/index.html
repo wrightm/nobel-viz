@@ -8,6 +8,10 @@
     <link rel="icon" type="image/x-icon" href="dc.logo.png"/>
     <style>
 
+    	.pointer {
+    		cursor: pointer;
+    	}
+
 		.land {
 		  fill: #ddd;
 		}
@@ -92,7 +96,7 @@
 			         selected out of 
 			        <span class="total-count"></span>
 			         records | 
-			        <a href="javascript:dc.filterAll(); dc.renderAll();">Reset All</a>
+			        <a id="reset-all-filters" class="pointer">Reset All</a>
 			      </span>
 			    </h2>
 			</div>
@@ -102,20 +106,17 @@
 
 			<div id="prize-chart" class="col-md-4">
 		        <strong>Prize Category of Laureates</strong>
-		        <a class="reset" href="javascript:prizeChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
-
+		        <a id="prize-chart-reset" class="reset pointer">reset</a>
 		        <div class="clearfix"></div>
 		    </div>
 		    <div id="male-female-chart" class="col-md-4">
 		        <strong>Laureates by Male/Female</strong>
-		        <a class="reset" href="javascript:maleOrFemaleChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
-
+		        <a id="male-female-chart-reset" class="reset pointer">reset</a>
 		        <div class="clearfix"></div>
 		    </div>
 		    <div id="day-of-week-chart" class="col-md-4">
 		        <strong>Day Laureates Were Born</strong>
-		        <a class="reset" href="javascript:dayOfWeekChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
-
+		        <a id="day-of-week-chart-reset" class="reset pointer">reset</a>
 		        <div class="clearfix"></div>
 		    </div>
 		</div>
@@ -124,8 +125,7 @@
 			</br>
 			<div id="month-chart">
 		        <p class="text-center"><strong>Laureates by Date of Birth</strong></p>
-		        <a class="reset" href="javascript:monthChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
-
+		        <a id="month-chart-reset" class="reset pointer">reset</a>
 		        <div class="clearfix"></div>
 		    </div>
 		</div>

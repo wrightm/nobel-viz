@@ -14,7 +14,8 @@ requirejs.config({
         'topojson': '/lib/topojson',
         'bubbleOverlay': '/app/modules/bubbles/bubbleOverlay',
         'bubbleOverlayHelpers': '/app/modules/bubbles/helpers',
-        'print': '/lib/print'
+        'print': '/lib/print',
+        'jquery' : '/lib/jquery'
     },
   	shim: {
     	'crossfilter': {
@@ -44,6 +45,10 @@ requirejs.config({
     	'print': {
     	deps: [],
     	exports: 'print'
+    },
+        'jquery': {
+        deps: [],
+        exports: 'jquery'
     }
   }
 });

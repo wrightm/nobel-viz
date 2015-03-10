@@ -3505,6 +3505,7 @@ This Mixin provides reusable functionalities for any chart that needs to visuali
 dc.bubbleMixin = function (_chart) {
     var _maxBubbleRelativeSize = 0.3;
     var _minRadiusWithLabel = 10;
+    var _fontSize = "10px";
 
     _chart.BUBBLE_NODE_CLASS = 'node';
     _chart.BUBBLE_CLASS = 'bubble';
@@ -3515,6 +3516,9 @@ dc.bubbleMixin = function (_chart) {
     _chart.renderLabel(true);
 
     _chart.data(function (group) {
+        if(group == undefined || null){
+            return [];
+        }
         return group.top(Infinity);
     });
 
@@ -3538,6 +3542,13 @@ dc.bubbleMixin = function (_chart) {
         return _chart;
     };
 
+    _chart.fontSize = function(_){
+        if(!arguments.length) {
+            return _fontSize;
+        }
+        _fontSize = _;
+        return _chart;
+    }
     /**
     #### .radiusValueAccessor([radiusValueAccessor])
     Get or set the radius value accessor function. If set, the radius value accessor function will
@@ -3571,7 +3582,7 @@ dc.bubbleMixin = function (_chart) {
     _chart.bubbleR = function (d) {
         var value = _chart.radiusValueAccessor()(d);
         var r = _chart.r()(value);
-        if (isNaN(r) || value <= 0) {
+        if (isNaN(r) || value <= 0 || r < 0) {
             r = 0;
         }
         return r;
@@ -3588,7 +3599,6 @@ dc.bubbleMixin = function (_chart) {
     _chart._doRenderLabel = function (bubbleGEnter) {
         if (_chart.renderLabel()) {
             var label = bubbleGEnter.select('text');
-
             if (label.empty()) {
                 label = bubbleGEnter.append('text')
                     .attr('text-anchor', 'middle')
@@ -3598,6 +3608,7 @@ dc.bubbleMixin = function (_chart) {
 
             label
                 .attr('opacity', 0)
+                .attr("font-size", _chart.fontSize())
                 .text(labelFunction);
             dc.transition(label, _chart.transitionDuration())
                 .attr('opacity', labelOpacity);
@@ -6628,6 +6639,8 @@ dc.bubbleOverlay = function (root, chartGroup) {
     var _chart = dc.bubbleMixin(dc.baseMixin({}));
     var _g;
     var _points = [];
+    var _minBubbleR = 0;
+    var _maxBubbleR = 1;
 
     _chart.transitionDuration(750);
 
@@ -6654,7 +6667,19 @@ dc.bubbleOverlay = function (root, chartGroup) {
     };
 
     _chart.removeCircles = function(){
-        _chart.svg().selectAll('circle').remove();
+        var data = mapData();
+
+        _points.forEach(function (point) {
+            var nodeG = getNodeG(point, data);
+
+            var circle = nodeG.select('circle.' + BUBBLE_CLASS);
+            var label = nodeG.select('text');
+            var title = nodeG.select('title');
+
+            circle.remove();
+            label.remove();
+            title.remove();
+        });
     };
 
     _chart.addPoints = function(points){
@@ -6673,7 +6698,7 @@ dc.bubbleOverlay = function (root, chartGroup) {
     _chart._doRender = function () {
         _g = initOverlayG();
 
-        _chart.r().range([_chart.MIN_RADIUS, _chart.width() * _chart.maxBubbleRelativeSize()]);
+        _chart.r().range([_chart.minBubbleR(), _chart.maxBubbleR()]);
 
         initializeBubbles();
 
@@ -6681,6 +6706,22 @@ dc.bubbleOverlay = function (root, chartGroup) {
 
         return _chart;
     };
+
+    _chart.minBubbleR = function(_){
+        if(!arguments.length){
+            return _minBubbleR;
+        }
+        _minBubbleR = _;
+        return _chart;
+    };
+
+    _chart.maxBubbleR = function(_){
+        if(!arguments.length){
+            return _maxBubbleR;
+        }
+        _maxBubbleR = _;
+        return _chart;
+    }
 
     function initOverlayG() {
         _g = _chart.select('g.' + BUBBLE_OVERLAY_CLASS);
@@ -6708,7 +6749,7 @@ dc.bubbleOverlay = function (root, chartGroup) {
 
             dc.transition(circle, _chart.transitionDuration())
                 .attr('r', function (d) {
-                    return _chart.bubbleR(d);
+                    return bubbleR(d);
                 });
 
             _chart._doRenderLabel(nodeG);
@@ -6724,6 +6765,15 @@ dc.bubbleOverlay = function (root, chartGroup) {
         });
         return data;
     }
+
+    function bubbleR(d) {
+        var value = _chart.radiusValueAccessor()(d);
+        var r = _chart.r()(value);
+        if (isNaN(r) || value <= 0 || r < 0) {
+            r = 0;
+        }
+        return r;
+    };
 
     function getNodeG(point, data) {
         var bubbleNodeClass = BUBBLE_NODE_CLASS + ' ' + dc.utils.nameToId(point.name);
@@ -6759,7 +6809,7 @@ dc.bubbleOverlay = function (root, chartGroup) {
 
             dc.transition(circle, _chart.transitionDuration())
                 .attr('r', function (d) {
-                    return _chart.bubbleR(d);
+                    return bubbleR(d);
                 })
                 .attr('fill', _chart.getColor);
 

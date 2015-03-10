@@ -1,6 +1,7 @@
 
 define(function (require) {
 
+  var jquery = require('jquery');
   var dc = require('dc');
   var d3 = require('d3');
   var crossfilter = require('crossfilter');
@@ -304,5 +305,30 @@ define(function (require) {
   function stopped() {
     if (d3.event.defaultPrevented) d3.event.stopPropagation();
   }
+
+  jquery( "#month-chart-reset" ).click(function() {
+    monthChart.filterAll();
+    dc.redrawAll();
+  });
+
+  jquery( "#day-of-week-chart-reset" ).click(function() {
+    dayOfWeekChart.filterAll();
+    dc.redrawAll();
+  });
+
+  jquery( "#male-female-chart-reset" ).click(function() {
+    maleOrFemaleChart.filterAll();
+    dc.redrawAll();
+  });
+
+  jquery( "#prize-chart-reset" ).click(function() {
+    prizeChart.filterAll();
+    dc.redrawAll();
+  });
+
+  jquery( "#reset-all-filters" ).click(function() {
+    dc.filterAll();
+    dc.redrawAll();
+  });
 
 });

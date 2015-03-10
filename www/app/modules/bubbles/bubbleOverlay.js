@@ -1,16 +1,21 @@
 
-define(function () {
+define(function (require) {
 
+    var bubbleOverlayHelpers = require("bubbleOverlayHelpers");
     var lastState = "";
 
-    function modifyBubbleOverlay(currentState,worldChart,dimension,group,points,width,height,message){
+    function modifyBubbleOverlay(currentState,worldChart,dimension,group,points,settings){
       if(lastState != currentState){
         worldChart.removeCircles();
         worldChart
+          .minRadiusWithLabel(0)
+          .minBubbleR(settings.minBubbleR)
+          .maxBubbleR(settings.maxBubbleR)
+          .fontSize(settings.fontSize)
           .deletePoints()
           .addPoints(points)
-          .width(width)
-          .height(height)
+          .width(settings.width)
+          .height(settings.height)
           .dimension(dimension)
           .group(group)
           .radiusValueAccessor(function(p) {
@@ -22,7 +27,7 @@ define(function () {
               return p.value;
           })
           .title(function(p) {
-              return message +": "+ p.key + "\n" +
+              return settings.message +": "+ p.key + "\n" +
                      "laureates: " + p.value;
           })
           .label(function(p){
@@ -49,60 +54,50 @@ define(function () {
     BubbleOverlay.prototype = {
 
       render : function(scale){
-          console.log(scale)
-          if(scale < 7 || scale == null || scale == undefined){
-            if(scale >= 1 && scale < 1.5){
-              modifyBubbleOverlay("Continent",this.worldChart,
-                this.continentDimension,
-                this.continentGroup,
-                this.continentPoints,
-                50,
-                50,
-                "Continent");
-            } else if(scale >= 1.5 && scale < 3) {
-              modifyBubbleOverlay("CountryLarge",this.worldChart,
-                this.countryDimension,
-                this.countryGroup,
-                this.countryPoints,
-                10,
-                20,
-                "Country");
-            } else if(scale >= 3 && scale < 4) {
-              modifyBubbleOverlay("CountryMedium",this.worldChart,
-                this.countryDimension,
-                this.countryGroup,
-                this.countryPoints,
-                10,
-                20,
-                "Country");
-            } else if(scale >= 4 && scale < 7) {
-              modifyBubbleOverlay("CountrySmall",this.worldChart,
-                this.countryDimension,
-                this.countryGroup,
-                this.countryPoints,
-                10,
-                20,
-                "Country");
-            }
-          } else {
-            if(scale >= 7 && scale < 11){
-              modifyBubbleOverlay("CityLarge",this.worldChart,
-                this.cityDimension,
-                this.cityGroup,
-                this.cityPoints,
-                10,
-                20,
-                "City");
-            } else {
-              modifyBubbleOverlay("CityMedium",this.worldChart,
-                this.cityDimension,
-                this.cityGroup,
-                this.cityPoints,
-                10,
-                20,
-                "City");
-            }
+          var state = bubbleOverlayHelpers.state(scale);
+          var settings = bubbleOverlayHelpers.stateSettings(scale);
+          if(state == "CountryXLarge"){
+            modifyBubbleOverlay("CountryXLarge",this.worldChart,
+              this.countryDimension,
+              this.countryGroup,
+              this.countryPoints,
+              settings);
+          } 
+          else if(state == "CountryLarge") {
+            modifyBubbleOverlay("CountryLarge",this.worldChart,
+              this.countryDimension,
+              this.countryGroup,
+              this.countryPoints,
+              settings);
+          } 
+          else if(state == "CountryMedium") {
+            modifyBubbleOverlay("CountryMedium",this.worldChart,
+              this.countryDimension,
+              this.countryGroup,
+              this.countryPoints,
+              settings);
+          } 
+          else if(state == "CountrySmall") {
+            modifyBubbleOverlay("CountrySmall",this.worldChart,
+              this.countryDimension,
+              this.countryGroup,
+              this.countryPoints,
+              settings);
           }
+          else if(state == "CityLarge"){
+            modifyBubbleOverlay("CityLarge",this.worldChart,
+              this.cityDimension,
+              this.cityGroup,
+              this.cityPoints,
+              settings);
+          } else if(state == "CityMedium"){
+            modifyBubbleOverlay("CityMedium",this.worldChart,
+              this.cityDimension,
+              this.cityGroup,
+              this.cityPoints,
+              settings);
+          }
+          
       }
 
     };
