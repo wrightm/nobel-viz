@@ -1,13 +1,14 @@
-define(['lib/jquery'], function($) {
-    describe('failing test', function() {
-        it('should fail', function() {
-            expect('Hello World!').toEqual('require.js up and running');
-        });
-    });
-
+define(['jquery', 'bubbleOverlay'], function($, bubbleOverlay) {
     describe('Load jquery', function () {
 	it('should log $', function() {
 	    console.log($);
 	});
     });
+
+    describe('Load bubbleOverlay', function () {
+	it('should log bubbleOverlay', function() {
+	    console.log(bubbleOverlay);
+	});
+    });
+
 });

@@ -10,19 +10,21 @@ for (var file in window.__karma__.files) {
 
 requirejs.config({
     // Karma serves files from '/base'
-    baseUrl: '/base',
+    baseUrl: 'base/',
 
+
+    // If you begin the path with '/' then it will be an absolute path - ignoring the baseUrl
     paths: {
-        'crossfilter': '/bower_components/crossfilter/crossfilter',
-        'd3': '/bower_components/d3/d3',
-        'colorbrewer': '/bower_components/colorbrewer/colorbrewer',
-        'dc': '/lib/dc',
-        'topojson': '/lib/topojson',
-        'bubbleOverlay': '/app/modules/bubbles/bubbleOverlay',
-        'bubbleOverlayHelpers': '/app/modules/bubbles/helpers',
-        'print': '/lib/print',
-        'jquery' : '/lib/jquery',
-        'underscore': '/lib/underscore',
+        'crossfilter': 'bower_components/crossfilter/crossfilter',
+        'd3': 'bower_components/d3/d3',
+        'colorbrewer': 'bower_components/colorbrewer/colorbrewer',
+        'dc': 'lib/dc',
+        'topojson': 'lib/topojson',
+        'bubbleOverlay': 'app/modules/bubbles/bubbleOverlay',
+        'bubbleOverlayHelpers': 'app/modules/bubbles/helpers',
+        'print': 'lib/print',
+        'jquery' : 'lib/jquery',
+        'underscore': 'lib/underscore',
     },
     
     shim: {
