@@ -15,7 +15,10 @@ requirejs.config({
         'bubbleOverlay': '/app/modules/bubbles/bubbleOverlay',
         'bubbleOverlayHelpers': '/app/modules/bubbles/helpers',
         'print': '/lib/print',
-        'jquery' : '/lib/jquery'
+        'jquery' : '/lib/jquery',
+        'globalSettings' : '/app/modules/settings/global-settings',
+        'laureateSettings' : '/app/modules/settings/laureate-settings',
+        'utilHelpers' : '/app/modules/utils/helper.js'
     },
   	shim: {
     	'crossfilter': {
@@ -49,10 +52,22 @@ requirejs.config({
         'jquery': {
         deps: [],
         exports: 'jquery'
+    },
+        'globalSettings': {
+        deps: [],
+        exports: 'globalSettings'
+    },
+        'laureateSettings': {
+        deps: [],
+        exports: 'laureateSettings'
+    },
+        'utilHelpers': {
+        deps: [],
+        exports: 'utilHelpers'
     }
   }
 });
 
 // Start loading the main app file. Put all of
 // your application logic in there.
-requirejs(['app/main']);
+requirejs(['app/main-nominators']);
