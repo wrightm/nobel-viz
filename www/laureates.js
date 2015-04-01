@@ -12,13 +12,15 @@ requirejs.config({
         'colorbrewer': '/bower_components/colorbrewer/colorbrewer',
         'dc': '/lib/dc',
         'topojson': '/lib/topojson',
-        'bubbleOverlay': '/app/modules/bubbles/bubbleOverlay',
+        'bubbleOverlay': '/app/modules/bubbles/bubble-overlay',
         'bubbleOverlayHelpers': '/app/modules/bubbles/helpers',
         'print': '/lib/print',
         'jquery' : '/lib/jquery',
         'globalSettings' : '/app/modules/settings/global-settings',
         'laureateSettings' : '/app/modules/settings/laureate-settings',
-        'utilHelpers' : '/app/modules/utils/helper.js'
+        'laureateValidation' : '/app/modules/validation/laureate-validation',
+        'laureatesCrossfilters' : '/app/modules/crossfilters/laureates-crossfilters',
+        'laureatesCharts' : '/app/modules/charts/laureates-charts'
     },
   	shim: {
     	'crossfilter': {
@@ -61,9 +63,9 @@ requirejs.config({
         deps: [],
         exports: 'laureateSettings'
     },
-        'utilHelpers': {
+        'laureateValidation': {
         deps: [],
-        exports: 'utilHelpers'
+        exports: 'laureateValidation'
     }
   }
 });

@@ -8,6 +8,9 @@ define(function (require) {
   var topojson = require('topojson');
   var bubbleOverlay  = require('bubbleOverlay');
   var globalSettings = require('globalSettings');
+  var laureateSettings = require('laureateSettings');
+  var LaureatesCrossfilters = require('laureatesCrossfilters');
+  var LaureatesCharts = require('laureatesCharts');
   
   var width = globalSettings.width(),
       height = globalSettings.height();
@@ -24,10 +27,11 @@ define(function (require) {
 
   var bubbleOverlayData = globalSettings.bubbleOverlayData();
 
-  var maleOrFemaleChart = dc.pieChart('#male-female-chart');
-  var dayOfWeekChart = dc.rowChart('#day-of-week-chart');
-  var monthChart = dc.barChart('#month-chart');
-  var prizeChart = dc.rowChart('#prize-chart');
+  var laureatesCharts = new LaureatesCharts();
+  var maleOrFemaleChart = laureatesCharts.maleOrFemaleChart();
+  var dayOfWeekChart = laureatesCharts.dayOfWeekChart();
+  var monthChart = laureatesCharts.monthChart();
+  var prizeChart = laureatesCharts.prizeChart();
   var worldChart = globalSettings.worldChart();
 
   d3.json("/data/world-50m.json", function(error, world) {
@@ -45,92 +49,28 @@ define(function (require) {
 
     d3.json("/data/laureates-world.json", function(error, data) {
 
-      var dateFormat = d3.time.format('%Y-%m-%d');
-      var numberFormat = d3.format('.2f');
-
-      data.forEach(function (d) {
-        d.born = dateFormat.parse(d.born);
-        d.lat = d.bornCityLatLon[0];
-        d.lon = d.bornCityLatLon[1]; 
-        d.month_born = d3.time.month(d.born);
-        d.day_born = d3.time.day(d.born); 
-      });
+      data = laureateSettings.validate(data);
       
-      //### Create Crossfilter Dimensions and Groups
-      //See the [crossfilter API](https://github.com/square/crossfilter/wiki/API-Reference) for reference.
-      var nominees = crossfilter(data);
-      var all = nominees.groupAll();
-
-      // dimension by month
-      var monthsDimension = nominees.dimension(function (d) {
-        return d.month_born;
-      });
-      var monthsGroup = monthsDimension.group();
-
-      // male or female
-      var maleOrFemale = nominees.dimension(function (d) {
-        return d.gender === "male" ? 'Male' : 'Female';
-      });
-      var maleOrFemaleGroup = maleOrFemale.group();
-
-      var dayOfWeek = nominees.dimension(function (d) {
-        var day = d.born.getDay();
-        var name = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-        return day + '.' + name[day];
-      });
-      var dayOfWeekGroup = dayOfWeek.group();
+      var laureatesCrossfilters = new LaureatesCrossfilters(data,projection);
+      var laureates = laureatesCrossfilters.getLaureates();
+      var laureatesDimensions = laureatesCrossfilters.getDimensions();
+      var laureatesGroups = laureatesCrossfilters.getGroups();
+      var laureatesAll = laureatesCrossfilters.getAll();
       
-      var prize = nominees.dimension(function(d){
-        return d.prize;
-      });
-
-      var prizeGroup = prize.group();
-
-      var bornCity =  nominees.dimension(function (d) {
-        return d.bornCity;
-      });
-      var bornCityGroup = bornCity.group();
-      
-      var bornCountry = nominees.dimension(function(d){
-        return d.bornCountryCode;
-      });
-      var bornCountryGroup = bornCountry.group();
-
-      var bornCountryPoints = [];
-      var bornCityPoints = [];
-      var bornContinentPoints = []
-      data.forEach(function(laureate){
-        var bornCityCoordinates = projection([laureate.bornCityLatLon[1],laureate.bornCityLatLon[0]]);
-        if(bornCityCoordinates !== null){
-          bornCityPoints.push({name:laureate.bornCity, x:bornCityCoordinates[0], y:bornCityCoordinates[1]});
-        }
-        var bornCountryCoordinates = projection([laureate.bornCountryLatLon[1],laureate.bornCountryLatLon[0]]);
-        if(bornCountryCoordinates !== null){
-          bornCountryPoints.push({name:laureate.bornCountryCode, x:bornCountryCoordinates[0], y:bornCountryCoordinates[1]});
-        }
-      });
-
-      bubbleOverlayData.cityDimension = bornCity;
-      bubbleOverlayData.cityGroup = bornCityGroup;
-      bubbleOverlayData.cityPoints = bornCityPoints;
-      bubbleOverlayData.countryDimension = bornCountry;
-      bubbleOverlayData.countryGroup = bornCountryGroup;
-      bubbleOverlayData.countryPoints = bornCountryPoints;
-
-      var overlay = new bubbleOverlay(worldChart,bubbleOverlayData);
+      var overlay = new bubbleOverlay(worldChart,laureatesCrossfilters.getBubbleOverlayData());
       overlay.render(1);
 
       // count all the facts
       dc.dataCount(".dc-data-count")
-          .dimension(nominees)
-          .group(all);
+          .dimension(laureates)
+          .group(laureatesAll);
 
       maleOrFemaleChart
           .width(180) // (optional) define chart width, :default = 200
           .height(180) // (optional) define chart height, :default = 200
           .radius(80) // define pie radius
-          .dimension(maleOrFemale) // set dimension
-          .group(maleOrFemaleGroup) // set group
+          .dimension(laureatesDimensions.gender) // set dimension
+          .group(laureatesGroups.gender) // set group
           /* (optional) by default pie chart will use group.key as its label
            * but you can overwrite it with a closure */
           .label(function (d) {
@@ -138,8 +78,8 @@ define(function (require) {
                   return d.key + '(0%)';
               }
               var label = d.key;
-              if (all.value()) {
-                  label += '(' + Math.floor(d.value / all.value() * 100) + '%)';
+              if (laureatesAll.value()) {
+                  label += '(' + Math.floor(d.value / laureatesAll.value() * 100) + '%)';
               }
               return label;
           })
@@ -161,8 +101,8 @@ define(function (require) {
           .width(180)
           .height(180)
           .margins({top: 20, left: 10, right: 10, bottom: 20})
-          .group(dayOfWeekGroup)
-          .dimension(dayOfWeek)
+          .group(laureatesGroups.dayOfWeek)
+          .dimension(laureatesDimensions.dayOfWeek)
           // assign colors to each value in the x scale domain
           .ordinalColors(['#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#dadaeb'])
           .label(function (d) {
@@ -181,8 +121,8 @@ define(function (require) {
           .width(180)
           .height(180)
           .margins({top: 20, left: 10, right: 10, bottom: 20})
-          .group(prizeGroup)
-          .dimension(prize)
+          .group(laureatesGroups.prize)
+          .dimension(laureatesDimensions.prize)
           // assign colors to each value in the x scale domain
           .ordinalColors(['#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#dadaeb'])
           .label(function (d) {
@@ -200,8 +140,8 @@ define(function (require) {
           .width(990)
           .height(40)
           .margins({top: 0, right: 50, bottom: 20, left: 40})
-          .dimension(monthsDimension)
-          .group(monthsGroup)
+          .group(laureatesGroups.months)
+          .dimension(laureatesDimensions.months)
           .centerBar(true)
           .gap(1)
           .x(d3.time.scale().domain([new Date(1840, 0, 1), new Date(1980, 11, 31)]))

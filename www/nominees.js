@@ -17,8 +17,7 @@ requirejs.config({
         'print': '/lib/print',
         'jquery' : '/lib/jquery',
         'globalSettings' : '/app/modules/settings/global-settings',
-        'laureateSettings' : '/app/modules/settings/laureate-settings',
-        'utilHelpers' : '/app/modules/utils/helper.js'
+        'laureateSettings' : '/app/modules/settings/laureate-settings'
     },
   	shim: {
     	'crossfilter': {
@@ -60,10 +59,6 @@ requirejs.config({
         'laureateSettings': {
         deps: [],
         exports: 'laureateSettings'
-    },
-        'utilHelpers': {
-        deps: [],
-        exports: 'utilHelpers'
     }
   }
 });
