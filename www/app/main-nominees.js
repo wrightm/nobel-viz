@@ -7,71 +7,44 @@ define(function (require) {
   var crossfilter = require('crossfilter');
   var topojson = require('topojson');
   var bubbleOverlay  = require('bubbleOverlay');
+  var globalSettings = require('globalSettings');
   
-  var width = 1300,
-      height = 500,
-      active = d3.select(null),
-      datasets = null;
+  var width = globalSettings.width(),
+      height = globalSettings.height();
 
-  var projection = d3.geo.equirectangular()
-      .scale(200)
-      .translate([width / 2, height / 2]);
+  var projection = globalSettings.projection();
 
-  var path = d3.geo.path()
-      .projection(projection);
+  var path = globalSettings.geoPathProjection();
 
-  var radius = d3.scale.sqrt()
-      .domain([0, 100])
-      .range([5, 30]);
+  var svg = globalSettings.svg();
 
-  var svg = d3.select("#map-container").append("div")
-      .attr("id", "world-map")
-      .append("svg")
-      .attr("width", width)
-      .attr("height", height)
-      .on("click", stopped, true);
+  var g = globalSettings.g();
 
-  svg.append("rect")
-      .attr("class", "background")
-      .attr("width", width)
-      .attr("height", height)
-      .on("click", reset);
+  var clicked = globalSettings.clicked();
 
-  var g = svg.append("g");
-
-  var zoom = d3.behavior.zoom()
-      .translate([0, 0])
-      .scale(1)
-      .scaleExtent([1, 12])
-      .on("zoom", zoomed);
-
-  svg
-      .call(zoom) // delete this line to disable free zooming
-      .call(zoom.event);
-
+  var bubbleOverlayData = globalSettings.bubbleOverlayData();
 
   var maleOrFemaleChart = dc.pieChart('#male-female-chart');
   var dayOfWeekChart = dc.rowChart('#day-of-week-chart');
   var monthChart = dc.barChart('#month-chart');
   var prizeChart = dc.rowChart('#prize-chart');
-  var worldChart = dc.bubbleOverlay("#world-map").svg(d3.select("#world-map svg g"));
-  var bubbleOverlayData = {};
+  var worldChart = globalSettings.worldChart();
 
   d3.json("/data/world-50m.json", function(error, world) {
+
     g.selectAll("path")
         .data(topojson.feature(world, world.objects.countries).features)
-      .enter().append("path")
+        .enter().append("path")
         .attr("d", path)
         .attr("class", "feature")
         .on("click", clicked);
-
     g.append("path")
         .datum(topojson.mesh(world, world.objects.countries, function(a, b) { return a !== b; }))
         .attr("class", "border border--state")
         .attr("d", path);
 
     d3.json("/data/laureates-world.json", function(error, data) {
-      
+
       var dateFormat = d3.time.format('%Y-%m-%d');
       var numberFormat = d3.format('.2f');
 
@@ -85,58 +58,43 @@ define(function (require) {
       
       //### Create Crossfilter Dimensions and Groups
       //See the [crossfilter API](https://github.com/square/crossfilter/wiki/API-Reference) for reference.
-      var laureates = crossfilter(data);
-      var all = laureates.groupAll();
-
-      // dimension by year
-      var yearlyDimension = laureates.dimension(function (d) {
-        return d3.time.year(d.born).getFullYear();
-      });
+      var nominees = crossfilter(data);
+      var all = nominees.groupAll();
 
       // dimension by month
-      var monthsDimension = laureates.dimension(function (d) {
+      var monthsDimension = nominees.dimension(function (d) {
         return d.month_born;
       });
       var monthsGroup = monthsDimension.group();
 
-      // dimension by days
-      var daysDimension = laureates.dimension(function (d) {
-        return d.day_born;
-      });
-
       // male or female
-      var maleOrFemale = laureates.dimension(function (d) {
+      var maleOrFemale = nominees.dimension(function (d) {
         return d.gender === "male" ? 'Male' : 'Female';
       });
       var maleOrFemaleGroup = maleOrFemale.group();
 
-      var dayOfWeek = laureates.dimension(function (d) {
+      var dayOfWeek = nominees.dimension(function (d) {
         var day = d.born.getDay();
         var name = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
         return day + '.' + name[day];
       });
       var dayOfWeekGroup = dayOfWeek.group();
       
-      var prize = laureates.dimension(function(d){
+      var prize = nominees.dimension(function(d){
         return d.prize;
       });
 
       var prizeGroup = prize.group();
 
-      var bornCity =  laureates.dimension(function (d) {
+      var bornCity =  nominees.dimension(function (d) {
         return d.bornCity;
       });
       var bornCityGroup = bornCity.group();
       
-      var bornCountry = laureates.dimension(function(d){
+      var bornCountry = nominees.dimension(function(d){
         return d.bornCountryCode;
       });
       var bornCountryGroup = bornCountry.group();
-
-      var bornContinent = laureates.dimension(function(d){
-        return d.bornContinent;
-      });
-      var bornContinentGroup = bornContinent.group();
 
       var bornCountryPoints = [];
       var bornCityPoints = [];
@@ -150,10 +108,6 @@ define(function (require) {
         if(bornCountryCoordinates !== null){
           bornCountryPoints.push({name:laureate.bornCountryCode, x:bornCountryCoordinates[0], y:bornCountryCoordinates[1]});
         }
-        var bornContinentCoordinates = projection([laureate.bornContinentLatLon[1],laureate.bornContinentLatLon[0]]);
-        if(bornContinentCoordinates !== null){
-          bornContinentPoints.push({name:laureate.bornContinent, x:bornContinentCoordinates[0], y:bornContinentCoordinates[1]});
-        }
       });
 
       bubbleOverlayData.cityDimension = bornCity;
@@ -162,16 +116,13 @@ define(function (require) {
       bubbleOverlayData.countryDimension = bornCountry;
       bubbleOverlayData.countryGroup = bornCountryGroup;
       bubbleOverlayData.countryPoints = bornCountryPoints;
-      bubbleOverlayData.continentDimension = bornContinent;
-      bubbleOverlayData.continentGroup = bornContinentGroup;
-      bubbleOverlayData.continentPoints = bornContinentPoints;
 
       var overlay = new bubbleOverlay(worldChart,bubbleOverlayData);
       overlay.render(1);
 
       // count all the facts
       dc.dataCount(".dc-data-count")
-          .dimension(laureates)
+          .dimension(nominees)
           .group(all);
 
       maleOrFemaleChart
@@ -262,50 +213,6 @@ define(function (require) {
     });
   });
 
-  function clicked(d) {
-    if (active.node() === this) return reset();
-    active.classed("active", false);
-    active = d3.select(this).classed("active", true);
-
-    var bounds = path.bounds(d),
-        dx = bounds[1][0] - bounds[0][0],
-        dy = bounds[1][1] - bounds[0][1],
-        x = (bounds[0][0] + bounds[1][0]) / 2,
-        y = (bounds[0][1] + bounds[1][1]) / 2,
-        scale = 0.5 / Math.max(dx / width, dy / height),
-        translate = [width / 2 - scale * x, height / 2 - scale * y];
-
-    svg.transition()
-        .duration(750)
-        .call(zoom.translate(translate).scale(scale).event);
-  }
-
-  function reset() {
-    active.classed("active", false);
-    active = d3.select(null);
-
-    svg.transition()
-        .duration(750)
-        .call(zoom.translate([0, 0]).scale(1).event);
-  }
-
-  function zoomed() {
-    g.style("stroke-width", 1.5 / d3.event.scale + "px");
-    g.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
-
-    if(bubbleOverlayData){
-      var overlay = new bubbleOverlay(worldChart,bubbleOverlayData);
-      overlay.render(d3.event.scale);
-    }
-
-  }
-
-  // If the drag behavior prevents the default click,
-  // also stop propagation so we don’t click-to-zoom.
-  function stopped() {
-    if (d3.event.defaultPrevented) d3.event.stopPropagation();
-  }
-
   jquery( "#month-chart-reset" ).click(function() {
     monthChart.filterAll();
     dc.redrawAll();
@@ -331,4 +238,11 @@ define(function (require) {
     dc.redrawAll();
   });
 
+  jquery(function() {
+     setTimeout(function(){
+      dc.filterAll();
+      dc.redrawAll();
+     },3000 );
+    
+  });
 });
