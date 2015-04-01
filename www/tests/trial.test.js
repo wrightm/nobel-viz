@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 define(['jquery', 'bubbleOverlay', 'url'], function($, bubbleOverlay, url) {
     describe('Test bubbleOverlay', function () {
 	it('Test modify bubble overlay function', function() {
@@ -31,3 +32,19 @@ define(['jquery', 'bubbleOverlay', 'url'], function($, bubbleOverlay, url) {
 
 
        
+=======
+define(['jquery', 'bubbleOverlay'], function($, bubbleOverlay) {
+    describe('Load jquery', function () {
+	it('should log $', function() {
+	    console.log($);
+	});
+    });
+
+    describe('Load bubbleOverlay', function () {
+	it('should log bubbleOverlay', function() {
+	    console.log(bubbleOverlay);
+	});
+    });
+
+});
+>>>>>>> develop
