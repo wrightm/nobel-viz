@@ -26,6 +26,8 @@ define(['jquery', 'bubbleOverlay', 'url'], function($, bubbleOverlay, url) {
 	    expect(filterResult['third']).toEqual('hello world');
 	});
     });
+
+    
     
 });
 

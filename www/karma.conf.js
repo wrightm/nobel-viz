@@ -17,6 +17,7 @@ module.exports = function(config) {
     files: [
 	'tests/test-main.js',
 	{pattern: 'app/modules/bubbles/*.js', included: false},
+	{pattern: 'app/modules/url.js', included: false},
 	{pattern: 'tests/*.test.js', included: false},
 	{pattern: 'lib/*.js', included: false}
     ],
