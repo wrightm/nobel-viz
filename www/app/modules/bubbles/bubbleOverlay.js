@@ -12,9 +12,6 @@ define(function (require) {
       this.countryDimension = datasets.countryDimension;
       this.countryGroup = datasets.countryGroup;
       this.countryPoints = datasets.countryPoints;
-      this.continentDimension = datasets.continentDimension;
-      this.continentGroup = datasets.continentGroup;
-      this.continentPoints = datasets.continentPoints;
     };
 
     

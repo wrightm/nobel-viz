@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Laureates</title>
+	<title>Nominees</title>
 
 	<link rel="stylesheet" type="text/css" href="bower_components/bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="bower_components/dc.js/dc.css"/>
@@ -89,8 +89,8 @@
 
 	<div class="container">
 		<div class="row">
-			<div class="dc-data-count" style="float: left;">
-			    <h2>Laureates
+			<div class="dc-data-count col-md-7" style="float: left;">
+			    <h2>Nominees
 			      <span>
 			        <span class="filter-count"></span>
 			         selected out of 
@@ -100,22 +100,29 @@
 			      </span>
 			    </h2>
 			</div>
+			<div class="col-md-4">
+				<div class="btn-group active" role="group" style="padding-top:9%; float: left;">
+  					<a id="laureates-buttons" type="button" class="btn btn-default" href="laureates.html" aria-controls="Laureates" role="tab" data-toggle="tab">Laureates</a>
+  					<a id="nominees-buttons" type="button" class="btn btn-default" href="nominees.html" aria-controls="Nominees" role="tab" data-toggle="tab">Nominees</a>
+  					<a id="nominators-buttons" type="button" class="btn btn-default" href="nominators.html" aria-controls="Nominators" role="tab" data-toggle="tab">Nominators</a>
+				</div>
+			</div>
 		</div>
 
 		<div class="row">
 
 			<div id="prize-chart" class="col-md-4">
-		        <strong>Prize Category of Laureates</strong>
+		        <strong>Prize Category of Nominees</strong>
 		        <a id="prize-chart-reset" class="reset pointer">reset</a>
 		        <div class="clearfix"></div>
 		    </div>
 		    <div id="male-female-chart" class="col-md-4">
-		        <strong>Laureates by Male/Female</strong>
+		        <strong>Nominees by Male/Female</strong>
 		        <a id="male-female-chart-reset" class="reset pointer">reset</a>
 		        <div class="clearfix"></div>
 		    </div>
 		    <div id="day-of-week-chart" class="col-md-4">
-		        <strong>Day Laureates Were Born</strong>
+		        <strong>Day Nominees Were Born</strong>
 		        <a id="day-of-week-chart-reset" class="reset pointer">reset</a>
 		        <div class="clearfix"></div>
 		    </div>
@@ -124,7 +131,7 @@
 		<div class="row">
 			</br>
 			<div id="month-chart">
-		        <p class="text-center"><strong>Laureates by Date of Birth</strong></p>
+		        <p class="text-center"><strong>Nominees by Date of Birth</strong></p>
 		        <a id="month-chart-reset" class="reset pointer">reset</a>
 		        <div class="clearfix"></div>
 		    </div>
@@ -140,7 +147,7 @@
 
 	</div>
 
-	<script data-main="app" src="lib/require.js"></script>
+	<script data-main="nominees" src="lib/require.js"></script>
 </body>
 
 </html>
