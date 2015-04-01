@@ -10,7 +10,7 @@ for (var file in window.__karma__.files) {
 
 requirejs.config({
     // Karma serves files from '/base'
-    baseUrl: '/base',
+    baseUrl: 'base/',
 
 
     // If you begin the path with '/' then it will be an absolute path - ignoring the baseUrl
@@ -22,7 +22,6 @@ requirejs.config({
         'topojson': 'lib/topojson',
         'bubbleOverlay': 'app/modules/bubbles/bubbleOverlay',
         'bubbleOverlayHelpers': 'app/modules/bubbles/helpers',
-	'url': 'app/modules/url',
         'print': 'lib/print',
         'jquery' : 'lib/jquery',
         'underscore': 'lib/underscore',
@@ -52,10 +51,6 @@ requirejs.config({
     	'bubbleOverlay': {
     	    deps: [],
     	    exports: 'bubbleOverlay'
-	},
-	'url': {
-	    deps: [],
-	    exports: 'url'
 	},
     	'print': {
     	    deps: [],
