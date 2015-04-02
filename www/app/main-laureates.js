@@ -247,26 +247,26 @@ define(function (require) {
 	});
     });
 
-    
-    
-    
     jquery( "#day-of-week-chart-reset" ).click(function() {
+	delete currentFilters['day'];
 	dayOfWeekChart.filterAll();
 	dc.redrawAll();
     });
     
     jquery( "#male-female-chart-reset" ).click(function() {
+	delete currentFilters['gender'];
 	maleOrFemaleChart.filterAll();
 	dc.redrawAll();
     });
     
     jquery( "#prize-chart-reset" ).click(function() {
+	delete currentFilters['prize'];
 	prizeChart.filterAll();
 	dc.redrawAll();
     });
     
     jquery( "#reset-all-filters" ).click(function() {
-	console.log(currentFilters);
+	currentFilters = {};
 	dc.filterAll();
 	dc.redrawAll();
     });
