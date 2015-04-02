@@ -15,6 +15,21 @@ define( function() {
 		urlParams[decode(match[1])] = decode(match[2]);
 	    }
 	    return urlParams;
+	},
+
+	generateURLQuery: function(currentFilters) {
+	    var queryString = ''
+	    var first = true;
+	    Object.keys(currentFilters).forEach(function(key) {
+		if (first) {
+		    first = false;
+		} else {
+		    queryString += '&';
+		}
+		queryString += key + '=' + currentFilters[key];
+	    });
+
+	    return queryString;
 	}
     };
 });
