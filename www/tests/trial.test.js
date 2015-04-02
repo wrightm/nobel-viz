@@ -31,8 +31,10 @@ define(['jquery', 'bubbleOverlay', 'url'], function($, bubbleOverlay, url) {
     describe('Test url query param generation', function() {
 	it('Verifies the correct query is returned', function() {
 	    var obj = {'first': '1', 'second':'scnd', 'third':['hello','world']};
-
 	    expect(url.generateURLQuery(obj)).toEqual('first=1&second=scnd&third=hello,world');
+
+	    obj = {'only':['one','two','three']};
+	    expect(url.generateURLQuery(obj)).toEqual('only=one,two,three');
 	});
     });
 });
