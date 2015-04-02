@@ -15,57 +15,62 @@ requirejs.config({
         'bubbleOverlay': '/app/modules/bubbles/bubbleOverlay',
         'bubbleOverlayHelpers': '/app/modules/bubbles/helpers',
         'print': '/lib/print',
+	'url': '/app/modules/url',
         'jquery' : '/lib/jquery',
         'globalSettings' : '/app/modules/settings/global-settings',
         'laureateSettings' : '/app/modules/settings/laureate-settings',
         'utilHelpers' : '/app/modules/utils/helper.js'
     },
-  	shim: {
+    shim: {
     	'crossfilter': {
-      	deps: [],
-      	exports: 'crossfilter'
-    },
-    	'd3': {
-    	deps: [],
-    	exports: 'd3'
-    },
+      	    deps: [],
+      	    exports: 'crossfilter'
+	},
+	'url': {
+	    deps: [],
+	    exports: 'url'
+	},
+      	'd3': {
+    	    deps: [],
+    	    exports: 'd3'
+	},
     	'colorbrewer': {
-    	deps: [],
-    	exports: 'colorbrewer'
-    },
+    	    deps: [],
+    	    exports: 'colorbrewer'
+	},
     	'dc': {
-    	deps: [],
-    	exports: 'dc'
-    },
+    	    deps: [],
+    	    exports: 'dc'
+	},
     	'topojson': {
-    	deps: [],
-    	exports: 'topojson'
-    },
+    	    deps: [],
+    	    exports: 'topojson'
+	},
     	'bubbleOverlay': {
-    	deps: [],
-    	exports: 'bubbleOverlay'
-    },
+    	    deps: [],
+    	    exports: 'bubbleOverlay'
+	},
     	'print': {
-    	deps: [],
-    	exports: 'print'
-    },
+    	    deps: [],
+    	    exports: 'print'
+	},
         'jquery': {
-        deps: [],
-        exports: 'jquery'
-    },
+	    deps: [],
+	    exports: 'jquery'
+	},
         'globalSettings': {
-        deps: [],
-        exports: 'globalSettings'
-    },
+	    deps: [],
+	    exports: 'globalSettings'
+	},
         'laureateSettings': {
-        deps: [],
-        exports: 'laureateSettings'
-    },
+	    deps: [],
+	    exports: 'laureateSettings'
+	},
         'utilHelpers': {
-        deps: [],
-        exports: 'utilHelpers'
+	    deps: [],
+	    exports: 'utilHelpers'
+	}
     }
-  }
 });
 
 // Start loading the main app file. Put all of
