@@ -66,6 +66,14 @@ requirejs.config({
         'laureateValidation': {
         deps: [],
         exports: 'laureateValidation'
+    },
+        'laureatesCrossfilters': {
+        deps: [],
+        exports: 'laureatesCrossfilters'
+    },
+        'laureatesCharts': {
+        deps: [],
+        exports: 'laureatesCharts'
     }
   }
 });

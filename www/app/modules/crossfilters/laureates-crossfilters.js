@@ -12,9 +12,6 @@ define(function (require) {
 	};
 
 	LaureatesCrossfilters.prototype = {
-		getLaureates : function(){
-
-		},
 		getDimensions : function(){
 			return this.dimensions;
 		},
@@ -55,15 +52,30 @@ define(function (require) {
 		dimensions["gender"] = gender;
 		groups["gender"] = genderGroup;
 
-		var dayOfWeek = laureates.dimension(function (d) {
-			var day = d.born.getDay();
-			var name = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-				return day + '.' + name[day];
-		});
-		var dayOfWeekGroup = dayOfWeek.group();
+		var seasonOfTheYear = laureates.dimension(function (d) {
+			
+			function season(month){
+				if(month == 11 || month == 0 || month == 1){
+					return "Winter";
+				}
+				else if(month == 2 || month == 3 || month == 4){
+					return "Spring";
+				}
+				else if(month == 5 || month == 6 || month == 7){
+					return "Summer";
+				}
+				else if(month == 8 || month == 9 || month == 10){
+					return "Autumn";
+				}
+			}
 
-		dimensions["dayOfWeek"] = dayOfWeek;
-		groups["dayOfWeek"] = dayOfWeekGroup;
+			var month = d.born.getMonth();
+			return season(month);
+		});
+		var seasonOfTheYearGroup = seasonOfTheYear.group();
+
+		dimensions["seasonOfTheYear"] = seasonOfTheYear;
+		groups["seasonOfTheYear"] = seasonOfTheYearGroup;
 
 		var prize = laureates.dimension(function(d){
 			return d.prize;
