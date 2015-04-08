@@ -210,19 +210,13 @@ define(function (require) {
 		.gap(1)
 		.x(d3.time.scale().domain([new Date(1840, 0, 1), new Date(1980, 11, 31)]))
 		.round(d3.time.month.round)
-		.alwaysUseRounding(true)
+ 		.alwaysUseRounding(true)
 		.xUnits(d3.time.months);
 	    monthChart.render();
-	    
-	});
-    });
-    
-    jquery( "#month-chart-reset" ).click(function() {
-	monthChart.filterAll();
-	dc.redrawAll();
-    });
 
-    monthChart.renderlet(function(chart) {
+
+
+	        monthChart.renderlet(function(chart) {
 	dc.events.trigger(function() {
 	    currentFilters['month'] = monthChart.filters();
 	});
@@ -245,6 +239,27 @@ define(function (require) {
 	dc.events.trigger(function() {
 	    currentFilters['day'] = dayOfWeekChart.filters();
 	});
+    });
+
+	    var params = url.getFilteredParams();
+	    if (params['day'] != null) {
+		dayOfWeekChart.filter(params['day']);
+	    }
+	    if (params['gender'] != null) {
+		maleOrFemaleChart.filter(params['gender']);
+	    }
+	    if (params['prize'] != null) {
+		prizeChart.filter(params['prize']);
+	    }
+
+	    dc.redrawAll();
+	    
+	});
+    });
+    
+    jquery( "#month-chart-reset" ).click(function() {
+	monthChart.filterAll();
+	dc.redrawAll();
     });
 
     jquery( "#day-of-week-chart-reset" ).click(function() {
@@ -270,13 +285,16 @@ define(function (require) {
 	dc.filterAll();
 	dc.redrawAll();
     });
+
+
+    
     
     jquery(function() {
 	setTimeout(function(){
-	    dc.filterAll();
+//	    dc.filterAll();
 	    dc.redrawAll();
 	},3000 );
-	
     });
+
     
 });
