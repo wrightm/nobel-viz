@@ -17,8 +17,11 @@ requirejs.config({
         'print': '/lib/print',
         'jquery' : '/lib/jquery',
         'globalSettings' : '/app/modules/settings/global-settings',
-        'laureateSettings' : '/app/modules/settings/laureate-settings',
-        'laureateValidation' : '/app/modules/validation/laureate-validation'
+        'nominatorSettings' : '/app/modules/settings/nominator-settings',
+        'nominatorValidation' : '/app/modules/validation/nominator-validation',
+        'nominatorCrossfilters' : '/app/modules/crossfilters/nominator-crossfilters',
+        'nominatorCharts' : '/app/modules/charts/nominator-charts',
+        'nominatorFormatter' : '/app/modules/formatters/nominator-formatter'
     },
   	shim: {
     	'crossfilter': {
@@ -57,13 +60,25 @@ requirejs.config({
         deps: [],
         exports: 'globalSettings'
     },
-        'laureateSettings': {
+        'nominatorSettings': {
         deps: [],
-        exports: 'laureateSettings'
+        exports: 'nominatorSettings'
     },
-        'laureateValidation': {
+        'nominatorValidation': {
         deps: [],
-        exports: 'laureateValidation'
+        exports: 'nominatorValidation'
+    },
+        'nominatorCrossfilters': {
+        deps: [],
+        exports: 'nominatorCrossfilters'
+    },
+        'nominatorCharts': {
+        deps: [],
+        exports: 'nominatorCharts'
+    },
+        'nominatorFormatter': {
+        deps: [],
+        exports: 'nominatorFormatter'
     }
   }
 });

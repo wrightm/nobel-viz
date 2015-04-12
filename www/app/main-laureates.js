@@ -25,8 +25,6 @@ define(function (require) {
 
   var clicked = globalSettings.clicked();
 
-  var bubbleOverlayData = globalSettings.bubbleOverlayData();
-
   var laureatesCharts = new LaureatesCharts();
   var maleOrFemaleChart = laureatesCharts.maleOrFemaleChart();
   var seasonOfTheYearChart = laureatesCharts.seasonOfTheYearChart();
@@ -54,8 +52,10 @@ define(function (require) {
       var laureatesCrossfilters = new LaureatesCrossfilters(data,projection);
       var laureates = laureatesCrossfilters.getLaureates();
       var laureatesAll = laureatesCrossfilters.getAll();
+      var bubbleOverlayData = laureatesCrossfilters.getBubbleOverlayData();
+      globalSettings.setBubbleOverlayData(bubbleOverlayData);
       
-      var overlay = new bubbleOverlay(worldChart,laureatesCrossfilters.getBubbleOverlayData());
+      var overlay = new bubbleOverlay(worldChart,bubbleOverlayData);
       overlay.render(1);
 
       // count all the facts

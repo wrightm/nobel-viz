@@ -40,6 +40,7 @@ define(function (require) {
 
     function BubbleOverlay(worldChart,datasets) {
       this.worldChart = worldChart;
+      this.datasets = datasets;
       this.cityDimension = datasets.cityDimension;
       this.cityGroup = datasets.cityGroup;
       this.cityPoints = datasets.cityPoints;

@@ -1,9 +1,6 @@
 define(function (require) {
 
 	var jquery = require('jquery');
-
-	var laureateSettings = require("laureateSettings");
-
 	var d3 = require('d3');
 
 	var active = d3.select(null);
@@ -97,9 +94,6 @@ define(function (require) {
 	};
 
 	GlobalSettings.prototype = {
-		laureates : function(){
-			return new laureateSettings();
-		},
 		width : function(){
 			return width;
 		},
@@ -120,6 +114,9 @@ define(function (require) {
 		},
 		bubbleOverlayData : function(){
 			return bubbleOverlayData;
+		},
+		setBubbleOverlayData : function(bubbles){
+			bubbleOverlayData = bubbles;
 		},
 		worldChart : function(){
 			return worldChart;
