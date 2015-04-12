@@ -18,12 +18,15 @@ define(['jquery', 'bubbleOverlay', 'url'], function($, bubbleOverlay, url) {
     
     describe('Test url filtering', function () {
 	it('Test the filtering of a url', function() {
-	    var queryString = 'first=1&second=scnd&third=hello%20world';
+	    var queryString = 'first=1&second=scnd&third=hello%20world&fourth=1,2';
+	    
 	    var filterResult = url.filterURLParams(queryString);
+	    
 	    
 	    expect(filterResult['first']).toEqual('1');
 	    expect(filterResult['second']).toEqual('scnd');
 	    expect(filterResult['third']).toEqual('hello world');
+	    expect(filterResult['fourth']).toEqual([1,2]);
 	});
     });
 

@@ -215,44 +215,64 @@ define(function (require) {
 	    monthChart.render();
 
 
-
-	        monthChart.renderlet(function(chart) {
-	dc.events.trigger(function() {
-	    currentFilters['month'] = monthChart.filters();
-	});
-    });
-    
-    maleOrFemaleChart.renderlet(function(chart) {
-	dc.events.trigger(function() {
-	    currentFilters['gender'] = maleOrFemaleChart.filters();
-	});
-    });
-
-    
-    prizeChart.renderlet(function(chart) {
-	dc.events.trigger(function() {
-	    currentFilters['prize'] = prizeChart.filters();
-	});
-    });
-
-    dayOfWeekChart.renderlet(function(chart) {
-	dc.events.trigger(function() {
-	    currentFilters['day'] = dayOfWeekChart.filters();
-	});
-    });
+	    function updateURL() {
+		for (var filter in currentFilters) {
+		    if (currentFilters.hasOwnProperty(filter)) {
+			if (currentFilters[filter].length == 0) {
+			    delete currentFilters[filter];
+			}
+		    }
+		}
+		history.replaceState({}, "", "/laureates.html?" + url.generateURLQuery(currentFilters));		    
+	    }
+	    
+	    monthChart.on("filtered", function(chart, filter) {
+		dc.events.trigger(function() {
+		    currentFilters['month'] = monthChart.filters();
+		});
+		updateURL();
+	    });
+	    
+	    maleOrFemaleChart.on("filtered", function(chart, filter) {
+		dc.events.trigger(function() {
+		    currentFilters['gender'] = maleOrFemaleChart.filters();
+		});
+		updateURL();
+	    });
+	    
+	    
+	    prizeChart.on("filtered", function(chart, filter) {
+		dc.events.trigger(function() {
+		    currentFilters['prize'] = prizeChart.filters();
+		});
+		updateURL();
+	    });
+	    
+	    dayOfWeekChart.on("filtered", function(chart, filter) {
+		dc.events.trigger(function() {
+		    currentFilters['day'] = dayOfWeekChart.filters();
+		});
+		updateURL();
+	    });
 
 	    var params = url.getFilteredParams();
 	    if (params['day'] != null) {
-		dayOfWeekChart.filter(params['day']);
+		params['day'].forEach(function (day) {
+		    dayOfWeekChart.filter(day);
+		});
 	    }
 	    if (params['gender'] != null) {
-		maleOrFemaleChart.filter(params['gender']);
+		params['gender'].forEach(function (gender) {
+		    maleOrFemaleChart.filter(gender);
+		});
 	    }
 	    if (params['prize'] != null) {
-		prizeChart.filter(params['prize']);
+		params['prize'].forEach(function(prize) {
+		    prizeChart.filter(prize);
+		});
 	    }
 
-	    dc.redrawAll();
+	    dc.renderAll();
 	    
 	});
     });
