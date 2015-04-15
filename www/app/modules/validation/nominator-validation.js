@@ -37,18 +37,20 @@ define(function (require) {
       "cityAndCountry": 0
     };
     var passed = 0;
-    var passedBeforeCountryCityMatch = 0;
     var numberOfNominators = nominators.length;
 		function isNominatorValid(nominator){
+
       var pass = true;
   		if(!isValid(nominator,"city")){
         failures.city += 1;
   			pass = false;
   		}
+      /*
   		if(!isValid(nominator,"prize")){
         failures.prize += 1;
   			pass = false;
   		}
+      */
   		if(!isValid(nominator,"dateOfBirth")){
         failures.dateOfBirth += 1;
   			pass = false;
@@ -67,10 +69,6 @@ define(function (require) {
   		}
       if(!isCityAndCountryVaild(nominator,latsAndLons)){
         failures.cityAndCountry += 1;
-        if(pass){
-          passedBeforeCountryCityMatch += 1;
-          console.log(nominator);
-        }
         pass = false;
       }
   		return pass;
@@ -87,8 +85,7 @@ define(function (require) {
     console.log("summary: numberOfNominators = ",numberOfNominators, 
       " passed = ", passed, 
       " failures = ",failures, 
-      " % of passes = ", passed / numberOfNominators, 
-      " passed before = ",passedBeforeCountryCityMatch);
+      " % of passes = ", passed / numberOfNominators);
 		return validatedData;	
 	};
 

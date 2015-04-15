@@ -22,6 +22,7 @@ define(function (require) {
 
 	var bubbleOverlay  = require('bubbleOverlay');
 	var bubbleOverlayData = {};
+	var currentState = "";
 
 	function stopped() {
     	if (d3.event.defaultPrevented) d3.event.stopPropagation();
@@ -68,7 +69,7 @@ define(function (require) {
 
 	    if(bubbleOverlayData){
 	      var overlay = new bubbleOverlay(worldChart,bubbleOverlayData);
-	      overlay.render(d3.event.scale);
+	      overlay.render(d3.event.scale,currentState);
 	    }
   	};	
 
@@ -126,6 +127,9 @@ define(function (require) {
 		},
 		clicked : function(){
 			return clicked;
+		},
+		setState : function(state){
+			currentState = state;
 		}
 	};
 

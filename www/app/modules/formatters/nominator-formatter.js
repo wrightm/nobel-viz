@@ -8,8 +8,14 @@ define(function (require) {
 	  }
 	};
 
-	function formatGender(nominator){
-	  nominator.gender = nominator.gender === "M" ? 'Male' : 'Female';
+	function formatCountry(nominator){
+		nominator.country = nominator.country.split("(")[0];
+		nominator.country = nominator.country.split("[")[0];
+	};
+
+	function formatCity(nominator){
+		nominator.city = nominator.city.split("(")[0];
+		nominator.city = nominator.city.split("[")[0];
 	};
 
 	function NominatorFormatter(){
@@ -17,8 +23,9 @@ define(function (require) {
 
 	NominatorFormatter.prototype = {
 		format : function(nominator){
-			formatGender(nominator);
         	formatPrize(nominator);
+        	formatCountry(nominator);
+        	formatCity(nominator);
 		}
 	};
 

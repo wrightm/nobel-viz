@@ -36,7 +36,7 @@ define(function (require) {
 
 		// dimension by month
 		var yearOfBirthDimension = nominators.dimension(function (d) {
-			return d.dateOfBirth;
+			return new Date(Number(d.dateOfBirth),0,1);
 		});
 		var yearOfBirthGroup = yearOfBirthDimension.group();
 
@@ -100,11 +100,11 @@ define(function (require) {
       				var cityLat = latsAndLonsCity["lat"];
       				var cityLon = latsAndLonsCity["lon"];
       				var bornCityCoordinates = projection([cityLon,cityLat]);
-			    	if(bornCityCoordinates !== null){
+			    	if(bornCityCoordinates !== null && city !== null){
 			      		bornCityPoints.push({name:city, x:bornCityCoordinates[0], y:bornCityCoordinates[1]});
 			    	}
 		        	var bornCountryCoordinates = projection([countryLon,countryLat]);
-		        	if(bornCountryCoordinates !== null){
+		        	if(bornCountryCoordinates !== null && country !== null){
 		          		bornCountryPoints.push({name:country, x:bornCountryCoordinates[0], y:bornCountryCoordinates[1]});
 		        	}
       			}

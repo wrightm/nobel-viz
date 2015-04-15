@@ -51,9 +51,9 @@ define(function (require) {
 
     BubbleOverlay.prototype = {
 
-      render : function(scale){
+      render : function(scale,name){
           var state = bubbleOverlayHelpers.state(scale);
-          var settings = bubbleOverlayHelpers.stateSettings(scale);
+          var settings = bubbleOverlayHelpers.stateSettings(scale,name);
           if(state == "CountryXLarge"){
             modifyBubbleOverlay("CountryXLarge",this.worldChart,
               this.countryDimension,

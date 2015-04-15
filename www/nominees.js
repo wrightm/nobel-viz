@@ -17,37 +17,40 @@ requirejs.config({
         'print': '/lib/print',
         'jquery' : '/lib/jquery',
         'globalSettings' : '/app/modules/settings/global-settings',
-        'laureateSettings' : '/app/modules/settings/laureate-settings',
-        'laureateValidation' : '/app/modules/validation/laureate-validation'
+        'nomineesSettings' : '/app/modules/settings/nominees-settings',
+        'nomineesValidation' : '/app/modules/validation/nominees-validation',
+        'nomineesCrossfilters' : '/app/modules/crossfilters/nominees-crossfilters',
+        'nomineesCharts' : '/app/modules/charts/nominees-charts',
+        'nomineesFormatter' : '/app/modules/formatters/nominees-formatter'
     },
-  	shim: {
-    	'crossfilter': {
-      	deps: [],
-      	exports: 'crossfilter'
+    shim: {
+        'crossfilter': {
+        deps: [],
+        exports: 'crossfilter'
     },
-    	'd3': {
-    	deps: [],
-    	exports: 'd3'
+        'd3': {
+        deps: [],
+        exports: 'd3'
     },
-    	'colorbrewer': {
-    	deps: [],
-    	exports: 'colorbrewer'
+        'colorbrewer': {
+        deps: [],
+        exports: 'colorbrewer'
     },
-    	'dc': {
-    	deps: [],
-    	exports: 'dc'
+        'dc': {
+        deps: [],
+        exports: 'dc'
     },
-    	'topojson': {
-    	deps: [],
-    	exports: 'topojson'
+        'topojson': {
+        deps: [],
+        exports: 'topojson'
     },
-    	'bubbleOverlay': {
-    	deps: [],
-    	exports: 'bubbleOverlay'
+        'bubbleOverlay': {
+        deps: [],
+        exports: 'bubbleOverlay'
     },
-    	'print': {
-    	deps: [],
-    	exports: 'print'
+        'print': {
+        deps: [],
+        exports: 'print'
     },
         'jquery': {
         deps: [],
@@ -57,13 +60,25 @@ requirejs.config({
         deps: [],
         exports: 'globalSettings'
     },
-        'laureateSettings': {
+        'nomineesSettings': {
         deps: [],
-        exports: 'laureateSettings'
+        exports: 'nomineesSettings'
     },
-        'laureateValidation': {
+        'nomineesValidation': {
         deps: [],
-        exports: 'laureateValidation'
+        exports: 'nomineesValidation'
+    },
+        'nomineesCrossfilters': {
+        deps: [],
+        exports: 'nomineesCrossfilters'
+    },
+        'nomineesCharts': {
+        deps: [],
+        exports: 'nomineesCharts'
+    },
+        'nomineesFormatter': {
+        deps: [],
+        exports: 'nomineesFormatter'
     }
   }
 });

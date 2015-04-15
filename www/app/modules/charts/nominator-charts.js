@@ -97,18 +97,21 @@ define(function (require) {
 	};
 
 	function setupYearOfBirthChart(nominatorsDimensions,nominatorsGroups){
-		monthChart
+		var minYearOfBirth = new Date(Number(nominatorsDimensions.yearOfBirth.bottom(1)[0].dateOfBirth),0,1);
+        var maxYearOfBirth = new Date(Number(nominatorsDimensions.yearOfBirth.top(1)[0].dateOfBirth),0,1);
+
+        yearOfBirthChart
         .width(990)
         .height(40)
         .margins({top: 0, right: 50, bottom: 20, left: 40})
-        .group(nominatorsGroups.months)
-        .dimension(nominatorsDimensions.months)
+        .group(nominatorsGroups.yearOfBirth)
+        .dimension(nominatorsDimensions.yearOfBirth)
         .centerBar(true)
         .gap(1)
-        .x(d3.time.scale().domain([new Date(1840, 0, 1), new Date(1980, 11, 31)]))
-        .round(d3.time.month.round)
+        .x(d3.time.scale().domain([minYearOfBirth, maxYearOfBirth]))
+        .round(d3.time.year.round)
         .alwaysUseRounding(true)
-        .xUnits(d3.time.months);
+        .xUnits(d3.time.years);
 	};
 
 	return NominatorCharts;

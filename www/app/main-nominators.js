@@ -1,6 +1,7 @@
 
 define(function (require) {
 
+  var state = "NOMINATOR";
   var jquery = require('jquery');
   var dc = require('dc');
   var d3 = require('d3');
@@ -57,9 +58,10 @@ define(function (require) {
         var nominatorsAll = nominatorCrossfilters.getAll();
         var bubbleOverlayData = nominatorCrossfilters.getBubbleOverlayData();
         globalSettings.setBubbleOverlayData(bubbleOverlayData);
+        globalSettings.setState(state);
 
         var overlay = new bubbleOverlay(worldChart,bubbleOverlayData);
-        overlay.render(1);
+        overlay.render(1,state);
 
         // count all the facts
         dc.dataCount(".dc-data-count")
