@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Nominators</title>
+
+	<link rel="stylesheet" type="text/css" href="bower_components/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="bower_components/dc.js/dc.css"/>
+    <link rel="icon" type="image/x-icon" href="dc.logo.png"/>
+    <style>
+
+    	.pointer {
+    		cursor: pointer;
+    	}
+
+		.land {
+		  fill: #ddd;
+		}
+
+		.border {
+		  fill: none;
+		  stroke: #fff;
+		  stroke-linejoin: round;
+		  stroke-linecap: round;
+		}
+
+		.bubble {
+		  fill: brown;
+		  fill-opacity: .5;
+		  stroke: #fff;
+		  stroke-width: .1px;
+		}
+
+		.bubble :hover {
+		  stroke: #000;
+		  cursor: pointer;
+		}
+
+		.legend circle {
+		  fill: none;
+		  stroke: #ccc;
+		}
+
+		.legend text {
+		  fill: #777;
+		  font: 10px sans-serif;
+		  text-anchor: middle;
+		}
+
+		.background {
+		  fill: none;
+		  pointer-events: all;
+		}
+
+		.feature {
+		  fill: #ccc;
+		  cursor: pointer;
+		}
+
+		.feature.active {
+		  fill: orange;
+		}
+
+		.mesh {
+		  fill: none;
+		  stroke: #fff;
+		  stroke-linecap: round;
+		  stroke-linejoin: round;
+		}
+
+		.dc-data-count {
+		    float: right;
+		    margin-top: 15px;
+		    margin-right: 15px;
+		}
+
+		.dc-data-count .filter-count {
+		    color: #3182bd;
+		    font-weight: bold;
+		}
+
+		.dc-data-count .total-count {
+		    color: #3182bd;
+		    font-weight: bold;
+		}
+
+	</style>
+</head>
+<body>
+
+	<div class="container">
+		<div class="row">
+			<div class="dc-data-count col-md-7" style="float: left;">
+			    <h2>Nominators
+			      <span>
+			        <span class="filter-count"></span>
+			         selected out of 
+			        <span class="total-count"></span>
+			         records | 
+			        <a id="reset-all-filters" class="pointer">Reset All</a>
+			      </span>
+			    </h2>
+			</div>
+			<div class="col-md-4">
+				<div class="btn-group" role="group" style="padding-top:9%; float: left;">
+  					<a id="laureates-buttons" type="button" class="btn btn-default" href="laureates.html" aria-controls="profile" role="tab" data-toggle="tab">Laureates</a>
+  					<a id="nominees-buttons" type="button" class="btn btn-default" href="nominees.html">Nominees</a>
+  					<a id="nominators-buttons" type="button" class="btn btn-default" href="nominators.html">Nominators</a>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-4"></div>
+			<!--
+			<div id="prize-chart" class="col-md-4">
+		        <strong>Prize Category of Nominators</strong>
+		        <a id="prize-chart-reset" class="reset pointer">reset</a>
+		        <div class="clearfix"></div>
+		    </div>
+			-->
+		    <div id="male-female-chart" class="col-md-4">
+		        <strong>Nominators by Male/Female</strong>
+		        <a id="male-female-chart-reset" class="reset pointer">reset</a>
+		        <div class="clearfix"></div>
+		    </div>
+		</div>
+
+		<div class="row">
+			</br>
+			<div id="year-of-birth-chart">
+		        <p class="text-center"><strong>Nominators by Year of Birth</strong></p>
+		        <a id="year-of-birth-chart-reset" class="reset pointer">reset</a>
+		        <div class="clearfix"></div>
+		    </div>
+		</div>
+
+		<div class="row">
+			</br>
+			<div id="map-container">
+		        <a class="reset" href="javascript:worldChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
+		        <div class="clearfix"></div>
+		    </div>
+		</div>
+
+	</div>
+
+	<script data-main="nominators" src="lib/require.js"></script>
+</body>
+
+</html>
