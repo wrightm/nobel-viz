@@ -45,12 +45,10 @@ define(function (require) {
         failures.city += 1;
   			pass = false;
   		}
-      /*
   		if(!isValid(nominator,"prize")){
         failures.prize += 1;
   			pass = false;
   		}
-      */
   		if(!isValid(nominator,"dateOfBirth")){
         failures.dateOfBirth += 1;
   			pass = false;

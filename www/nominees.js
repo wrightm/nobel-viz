@@ -21,7 +21,8 @@ requirejs.config({
         'nomineesValidation' : '/app/modules/validation/nominees-validation',
         'nomineesCrossfilters' : '/app/modules/crossfilters/nominees-crossfilters',
         'nomineesCharts' : '/app/modules/charts/nominees-charts',
-        'nomineesFormatter' : '/app/modules/formatters/nominees-formatter'
+        'nomineesFormatter' : '/app/modules/formatters/nominees-formatter',
+        'bootstrap' :  '/bower_components/bootstrap/dist/js/bootstrap' 
     },
     shim: {
         'crossfilter': {
@@ -79,6 +80,10 @@ requirejs.config({
         'nomineesFormatter': {
         deps: [],
         exports: 'nomineesFormatter'
+    },
+        'bootstrap': {
+        deps: ['jquery'],
+        exports: 'bootstrap'
     }
   }
 });

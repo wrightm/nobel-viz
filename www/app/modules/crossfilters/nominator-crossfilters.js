@@ -43,6 +43,14 @@ define(function (require) {
 		dimensions["yearOfBirth"] = yearOfBirthDimension;
 		groups["yearOfBirth"] = yearOfBirthGroup;
 
+		var nominatorYearDimension = nominators.dimension(function (d) {
+			return new Date(Number(d.nominatorYear),0,1);
+		});
+		var nominatorYearGroup = nominatorYearDimension.group();
+
+		dimensions["nominatorYear"] = nominatorYearDimension;
+		groups["nominatorYear"] = nominatorYearGroup;
+
 		// male or female
 		var gender = nominators.dimension(function (d) {
 			return d.gender === "M" ? 'Male' : 'Female';

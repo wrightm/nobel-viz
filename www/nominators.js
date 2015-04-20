@@ -21,7 +21,8 @@ requirejs.config({
         'nominatorValidation' : '/app/modules/validation/nominator-validation',
         'nominatorCrossfilters' : '/app/modules/crossfilters/nominator-crossfilters',
         'nominatorCharts' : '/app/modules/charts/nominator-charts',
-        'nominatorFormatter' : '/app/modules/formatters/nominator-formatter'
+        'nominatorFormatter' : '/app/modules/formatters/nominator-formatter',
+        'bootstrap' :  '/bower_components/bootstrap/dist/js/bootstrap' 
     },
   	shim: {
     	'crossfilter': {
@@ -79,6 +80,10 @@ requirejs.config({
         'nominatorFormatter': {
         deps: [],
         exports: 'nominatorFormatter'
+    },
+        'bootstrap': {
+        deps: ['jquery'],
+        exports: 'bootstrap'
     }
   }
 });

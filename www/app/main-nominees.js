@@ -12,6 +12,7 @@ define(function (require) {
   var nomineesSettings = require('nomineesSettings');
   var NomineesCrossfilters = require('nomineesCrossfilters');
   var NomineesCharts = require('nomineesCharts');
+  var bootstrap = require('bootstrap');
   
   var width = globalSettings.width(),
       height = globalSettings.height();
@@ -31,6 +32,7 @@ define(function (require) {
   var nomineesCharts = new NomineesCharts();
   var maleOrFemaleChart = nomineesCharts.maleOrFemaleChart();
   var yearOfBirthChart = nomineesCharts.yearOfBirthChart();
+  var nominatorYearChart = nomineesCharts.nominatorYearChart();
   var prizeChart = nomineesCharts.prizeChart();
   var worldChart = globalSettings.worldChart();
 
@@ -80,6 +82,11 @@ define(function (require) {
     dc.redrawAll();
   });
 
+  jquery( "#nominator-year-chart-reset" ).click(function() {
+    nominatorYearChart.filterAll();
+    dc.redrawAll();
+  });
+
   jquery( "#male-female-chart-reset" ).click(function() {
     maleOrFemaleChart.filterAll();
     dc.redrawAll();
@@ -93,6 +100,11 @@ define(function (require) {
   jquery( "#reset-all-filters" ).click(function() {
     dc.filterAll();
     dc.redrawAll();
+  });
+
+  jquery('#timeline a').click(function (e) {
+    e.preventDefault()
+    $(this).tab('show')
   });
 
   jquery(function() {

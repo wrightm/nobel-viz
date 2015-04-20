@@ -5,6 +5,7 @@ define(function (require) {
 
 	var maleOrFemaleChart = dc.pieChart('#male-female-chart');
 	var yearOfBirthChart = dc.barChart('#year-of-birth-chart');
+    var nominatorYearChart = dc.barChart('#nominator-year-chart');
 	var prizeChart = dc.rowChart('#prize-chart');
 
 	function NominatorCharts(){
@@ -20,6 +21,9 @@ define(function (require) {
 		yearOfBirthChart : function(){
 			return yearOfBirthChart;
 		},
+        nominatorYearChart : function(){
+            return nominatorYearChart;
+        },
 		prizeChart : function(){
 			return prizeChart;
 		},
@@ -32,11 +36,13 @@ define(function (require) {
             setupMaleOrFemaleChart(nominatorsDimensions,nominatorsGroups,nominatorsAll);
             setupPrizeChart(nominatorsDimensions,nominatorsGroups);
             setupYearOfBirthChart(nominatorsDimensions,nominatorsGroups);
+            setupNominatorYearChartChart(nominatorsDimensions,nominatorsGroups);
 		},
 		render : function(){
 			maleOrFemaleChart.render();
 			prizeChart.render();
 			yearOfBirthChart.render();
+            nominatorYearChart.render();
 		}
 	};
 
@@ -109,10 +115,29 @@ define(function (require) {
         .centerBar(true)
         .gap(1)
         .x(d3.time.scale().domain([minYearOfBirth, maxYearOfBirth]))
+        .y(d3.scale.linear().domain([1,nominatorsGroups.yearOfBirth.top(1)[0].value*.10]))
         .round(d3.time.year.round)
         .alwaysUseRounding(true)
         .xUnits(d3.time.years);
 	};
+
+    function setupNominatorYearChartChart(nominatorsDimensions,nominatorsGroups){
+        var minNominatorYear = new Date(Number(nominatorsDimensions.nominatorYear.bottom(1)[0].nominatorYear),0,1);
+        var maxNominatorYear = new Date(Number(nominatorsDimensions.nominatorYear.top(1)[0].nominatorYear),0,1);
+
+        nominatorYearChart
+        .width(990)
+        .height(40)
+        .margins({top: 0, right: 50, bottom: 20, left: 40})
+        .group(nominatorsGroups.nominatorYear)
+        .dimension(nominatorsDimensions.nominatorYear)
+        .centerBar(true)
+        .gap(1)
+        .x(d3.time.scale().domain([minNominatorYear, maxNominatorYear]))
+        .round(d3.time.year.round)
+        .alwaysUseRounding(true)
+        .xUnits(d3.time.years);
+    };
 
 	return NominatorCharts;
 
