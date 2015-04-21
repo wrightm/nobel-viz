@@ -1,4 +1,3 @@
-
 define(function (require) {
 
     var jquery = require('jquery');
@@ -66,7 +65,6 @@ define(function (require) {
 	    
 	    // dimension by month
 	    var monthsDimension = nominees.dimension(function (d) {
-		
 		return d.month_born;
 	    });
 	    var monthsGroup = monthsDimension.group();
@@ -213,46 +211,36 @@ define(function (require) {
  		.alwaysUseRounding(true)
 		.xUnits(d3.time.months);
 	    monthChart.render();
-
-
-	    function updateURL() {
-		for (var filter in currentFilters) {
-		    if (currentFilters.hasOwnProperty(filter)) {
-			if (currentFilters[filter].length == 0) {
-			    delete currentFilters[filter];
-			}
-		    }
-		}
-		history.replaceState({}, "", "/laureates.html?" + url.generateURLQuery(currentFilters));		    
-	    }
 	    
 	    monthChart.on("filtered", function(chart, filter) {
-		dc.events.trigger(function() {
-		    currentFilters['month'] = monthChart.filters();
-		});
-		updateURL();
+		var monthArray = monthChart.filters()[0];
+		if (monthArray != null) {
+		    currentFilters['month'] = [dateFormat(monthArray[0]), dateFormat(monthArray[1])];
+		} else {
+		    delete currentFilters['month'];
+		}
+		updateURL("/laureates.html", currentFilters);
 	    });
 	    
 	    maleOrFemaleChart.on("filtered", function(chart, filter) {
 		dc.events.trigger(function() {
 		    currentFilters['gender'] = maleOrFemaleChart.filters();
 		});
-		updateURL();
+		updateURL("/laureates.html", currentFilters);
 	    });
-	    
 	    
 	    prizeChart.on("filtered", function(chart, filter) {
 		dc.events.trigger(function() {
 		    currentFilters['prize'] = prizeChart.filters();
 		});
-		updateURL();
+		updateURL("/laureates.html", currentFilters);
 	    });
 	    
 	    dayOfWeekChart.on("filtered", function(chart, filter) {
 		dc.events.trigger(function() {
 		    currentFilters['day'] = dayOfWeekChart.filters();
 		});
-		updateURL();
+		updateURL("/laureates.html", currentFilters);
 	    });
 
 	    var params = url.getFilteredParams();
@@ -271,9 +259,13 @@ define(function (require) {
 		    prizeChart.filter(prize);
 		});
 	    }
-
-	    dc.renderAll();
+//	    if (params['month'] != null) {
+//		var start = dateFormat.parse(params['month'][0]);
+//		var end  = dateFormat.parse(params['month'][1]);
+//
+//	    }
 	    
+	    dc.redrawAll();
 	});
     });
     
@@ -306,8 +298,6 @@ define(function (require) {
 	dc.redrawAll();
     });
 
-
-    
     
     jquery(function() {
 	setTimeout(function(){
