@@ -15,7 +15,7 @@ requirejs.config({
         'bubbleOverlay': '/app/modules/bubbles/bubble-overlay',
         'bubbleOverlayHelpers': '/app/modules/bubbles/helpers',
         'print': '/lib/print',
-	'url': '/app/modules/url',
+	    'url': '/app/modules/url',
         'jquery' : '/lib/jquery',
         'globalSettings' : '/app/modules/settings/global-settings',
         'nomineesSettings' : '/app/modules/settings/nominees-settings',
@@ -23,73 +23,78 @@ requirejs.config({
         'nomineesCrossfilters' : '/app/modules/crossfilters/nominees-crossfilters',
         'nomineesCharts' : '/app/modules/charts/nominees-charts',
         'nomineesFormatter' : '/app/modules/formatters/nominees-formatter',
-        'bootstrap' :  '/bower_components/bootstrap/dist/js/bootstrap' 
+        'bootstrap' :  '/bower_components/bootstrap/dist/js/bootstrap',
+        'socialShareUrl' : '/app/modules/social/social-share-url'
     },
     shim: {
         'crossfilter': {
             deps: [],
             exports: 'crossfilter'
-	},
-	'url': {
-	    deps: [],
-	    exports: 'url'
-	},
-        'd3': {
+    	},
+    	'url': {
+    	    deps: [],
+    	    exports: 'url'
+    	},
+            'd3': {
+                deps: [],
+                exports: 'd3'
+    	},
+            'colorbrewer': {
+                deps: [],
+                exports: 'colorbrewer'
+    	},
+            'dc': {
+                deps: [],
+                exports: 'dc'
+    	},
+            'topojson': {
+                deps: [],
+                exports: 'topojson'
+    	},
+            'bubbleOverlay': {
+                deps: [],
+                exports: 'bubbleOverlay'
+    	},
+            'print': {
+                deps: [],
+                exports: 'print'
+    	},
+            'jquery': {
+                deps: [],
+                exports: 'jquery'
+    	},
+            'globalSettings': {
+                deps: [],
+                exports: 'globalSettings'
+    	},
+            'nomineesSettings': {
+                deps: [],
+                exports: 'nomineesSettings'
+    	},
+            'nomineesValidation': {
+                deps: [],
+                exports: 'nomineesValidation'
+    	},
+            'nomineesCrossfilters': {
+                deps: [],
+                exports: 'nomineesCrossfilters'
+    	},
+            'nomineesCharts': {
+                deps: [],
+                exports: 'nomineesCharts'
+    	},
+            'nomineesFormatter': {
+                deps: [],
+                exports: 'nomineesFormatter'
+    	},
+            'bootstrap': {
+                deps: ['jquery'],
+                exports: 'bootstrap'
+    	},
+            'socialShareUrl' : {
             deps: [],
-            exports: 'd3'
-	},
-        'colorbrewer': {
-            deps: [],
-            exports: 'colorbrewer'
-	},
-        'dc': {
-            deps: [],
-            exports: 'dc'
-	},
-        'topojson': {
-            deps: [],
-            exports: 'topojson'
-	},
-        'bubbleOverlay': {
-            deps: [],
-            exports: 'bubbleOverlay'
-	},
-        'print': {
-            deps: [],
-            exports: 'print'
-	},
-        'jquery': {
-            deps: [],
-            exports: 'jquery'
-	},
-        'globalSettings': {
-            deps: [],
-            exports: 'globalSettings'
-	},
-        'nomineesSettings': {
-            deps: [],
-            exports: 'nomineesSettings'
-	},
-        'nomineesValidation': {
-            deps: [],
-            exports: 'nomineesValidation'
-	},
-        'nomineesCrossfilters': {
-            deps: [],
-            exports: 'nomineesCrossfilters'
-	},
-        'nomineesCharts': {
-            deps: [],
-            exports: 'nomineesCharts'
-	},
-        'nomineesFormatter': {
-            deps: [],
-            exports: 'nomineesFormatter'
-	},
-        'bootstrap': {
-            deps: ['jquery'],
-            exports: 'bootstrap'
-	}
+            exports: 'socialShareUrl'
+        }
     }
 });
 

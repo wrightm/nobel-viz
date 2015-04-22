@@ -1,6 +1,5 @@
 define(function (require) {
     
-    
     var state = "LAUREATES";
     var jquery = require('jquery');
     var dc = require('dc');
@@ -12,13 +11,14 @@ define(function (require) {
     var laureateSettings = require('laureateSettings');
     var LaureatesCrossfilters = require('laureatesCrossfilters');
     var LaureatesCharts = require('laureatesCharts');
+    var socialShareUrl = require('socialShareUrl');
     
     var url = require('url');
     var currentFilters = {};
     
     
     var width = globalSettings.width(),
-	height = globalSettings.height();
+	   height = globalSettings.height();
     
     var projection = globalSettings.projection();
     
@@ -39,18 +39,18 @@ define(function (require) {
     
     d3.json("/data/world-50m.json", function(error, world) {
 	
-	g.selectAll("path")
+	   g.selectAll("path")
             .data(topojson.feature(world, world.objects.countries).features)
             .enter().append("path")
             .attr("d", path)
             .attr("class", "feature")
             .on("click", clicked);
-	g.append("path")
+	   g.append("path")
             .datum(topojson.mesh(world, world.objects.countries, function(a, b) { return a !== b; }))
             .attr("class", "border border--state")
             .attr("d", path);
 	
-	d3.json("/data/laureates-world.json", function(error, data) {
+	   d3.json("/data/laureates-world.json", function(error, data) {
 	    
 	    data = laureateSettings.validate(data);
 	    
@@ -66,13 +66,11 @@ define(function (require) {
 	    
 	    // count all the facts
 	    dc.dataCount(".dc-data-count")
-		.dimension(laureates)
-		.group(laureatesAll)
-		.render();
+  		.dimension(laureates)
+  		.group(laureatesAll)
+  		.render();
 	    
 	    laureatesCharts.setCrossfilters(laureatesCrossfilters);
-	    
-	    
 	    
 	    url.addURLFilteringToChart("/laureates.html", currentFilters, seasonOfTheYearChart, 'season');
 	    url.addURLFilteringToChart("/laureates.html", currentFilters, prizeChart, 'prize');
@@ -82,96 +80,61 @@ define(function (require) {
 	    var params = url.getFilteredParams();
 	    
 	    if (params['season'] != null) {
-		params['season'].forEach(function (day) {
-		    seasonOfTheYearChart.filter(day);
-		});
+    		params['season'].forEach(function (day) {
+    		    seasonOfTheYearChart.filter(day);
+    		});
 	    }
 	    if (params['gender'] != null) {
-		params['gender'].forEach(function (gender) {
-		    maleOrFemaleChart.filter(gender);
-		});
+    		params['gender'].forEach(function (gender) {
+    		    maleOrFemaleChart.filter(gender);
+    		});
 	    }
 	    if (params['prize'] != null) {
-		params['prize'].forEach(function(prize) {
-		    prizeChart.filter(prize);
-		});
+    		params['prize'].forEach(function(prize) {
+    		    prizeChart.filter(prize);
+    		});
 	    }
 	    
 	    dc.redrawAll();
-	});
+	   });
     });
     
     jquery( "#month-chart-reset" ).click(function() {
-	monthChart.filterAll();
-	dc.redrawAll();
+    	monthChart.filterAll();
+    	dc.redrawAll();
     });
     
     jquery( "#season-of-the-year-chart-reset" ).click(function() {
-	delete currentFilters['season'];
-	seasonOfTheYearChart.filterAll();
-	dc.redrawAll();
+    	delete currentFilters['season'];
+    	seasonOfTheYearChart.filterAll();
+    	dc.redrawAll();
     });
     
     jquery( "#male-female-chart-reset" ).click(function() {
-	delete currentFilters['gender'];
-	maleOrFemaleChart.filterAll();
-	dc.redrawAll();
+    	delete currentFilters['gender'];
+    	maleOrFemaleChart.filterAll();
+    	dc.redrawAll();
     });
     
     jquery( "#prize-chart-reset" ).click(function() {
-	delete currentFilters['prize'];
-	prizeChart.filterAll();
-	
-	dc.redrawAll();
+    	delete currentFilters['prize'];
+    	prizeChart.filterAll();
+    	
+    	dc.redrawAll();
     });
     
     jquery( "#reset-all-filters" ).click(function() {
-	currentFilters = {};
-	dc.filterAll();
-	dc.redrawAll();
+    	currentFilters = {};
+    	dc.filterAll();
+    	dc.redrawAll();
     });
     
-    jquery('#facebook-share').click(function (e) {
-	var url = document.location.href;
-	var title = 'Data Visualisation';
-	window.open('http://www.facebook.com/share.php?u='+url+'&title='+title, '_blank');
-    });
-    
-    jquery('#google-share').click(function (e) {
-	var url = document.location.href;
-	var title = 'Data Visualisation';
-	window.open('https://plus.google.com/share?url='+url, '_blank');
-    });
-    
-    jquery('#linkedin-share').click(function (e) {
-	var url = document.location.href;
-	var title = 'Data Visualisation';
-	window.open('http://www.linkedin.com/shareArticle?mini=true&url='+url+'&title='+title, '_blank');
-    });
-    
-    jquery('#pinterest-share').click(function (e) {
-	var url = document.location.href;
-	var title = 'Data Visualisation';
-	window.open('http://pinterest.com/pin/create/bookmarklet/?url='+url+'&is_video=false&description='+title, '_blank');
-    });
-    
-    jquery('#reddit-share').click(function (e) {
-	var url = document.location.href;
-	var title = 'Data Visualisation';
-	window.open('http://www.reddit.com/submit?url='+url+'&title='+title, '_blank');
-    });
-    
-    jquery('#twitter-share').click(function (e) {
-	var url = document.location.href;
-	var title = 'Data Visualisation';
-	window.open('http://twitter.com/intent/tweet?status='+title+'+'+url, '_blank');
-    });
-    
+    socialShareUrl.shareUrl();
     
     jquery(function() {
-	setTimeout(function(){
+	   setTimeout(function(){
 	    dc.redrawAll();
-	}, 3000);
+	   }, 3000);
     });
     
     

@@ -15,75 +15,80 @@ requirejs.config({
         'bubbleOverlay': '/app/modules/bubbles/bubble-overlay',
         'bubbleOverlayHelpers': '/app/modules/bubbles/helpers',
         'print': '/lib/print',
-	'url': '/app/modules/url',
+	    'url': '/app/modules/url',
         'jquery' : '/lib/jquery',
         'globalSettings' : '/app/modules/settings/global-settings',
         'laureateSettings' : '/app/modules/settings/laureate-settings',
         'laureateValidation' : '/app/modules/validation/laureate-validation',
         'laureatesCrossfilters' : '/app/modules/crossfilters/laureates-crossfilters',
-        'laureatesCharts' : '/app/modules/charts/laureates-charts'
+        'laureatesCharts' : '/app/modules/charts/laureates-charts',
+        'socialShareUrl' : '/app/modules/social/social-share-url'
     },
     shim: {
     	'crossfilter': {
       	    deps: [],
       	    exports: 'crossfilter'
-	},
-	'url': {
-	    deps: [],
-	    exports: 'url'
-	},
-      	'd3': {
+    	},
+    	'url': {
     	    deps: [],
-    	    exports: 'd3'
-	},
-    	'colorbrewer': {
+    	    exports: 'url'
+    	},
+          	'd3': {
+        	    deps: [],
+        	    exports: 'd3'
+    	},
+        	'colorbrewer': {
+        	    deps: [],
+        	    exports: 'colorbrewer'
+    	},
+        	'dc': {
+        	    deps: [],
+        	    exports: 'dc'
+    	},
+        	'topojson': {
+        	    deps: [],
+        	    exports: 'topojson'
+    	},
+        	'bubbleOverlay': {
+        	    deps: [],
+        	    exports: 'bubbleOverlay'
+    	},
+        	'print': {
+        	    deps: [],
+        	    exports: 'print'
+    	},
+            'jquery': {
     	    deps: [],
-    	    exports: 'colorbrewer'
-	},
-    	'dc': {
+    	    exports: 'jquery'
+    	},
+            'globalSettings': {
     	    deps: [],
-    	    exports: 'dc'
-	},
-    	'topojson': {
+    	    exports: 'globalSettings'
+    	},
+            'laureateSettings': {
+                deps: [],
+                exports: 'laureateSettings'
+    	},
+            'laureateValidation': {
+                deps: [],
+                exports: 'laureateValidation'
+    	},
+            'laureatesCrossfilters': {
+                deps: [],
+                exports: 'laureatesCrossfilters'
+    	},
+            'laureatesCharts': {
+                deps: [],
+                exports: 'laureatesCharts'
+    	},
+            'utilHelpers': {
     	    deps: [],
-    	    exports: 'topojson'
-	},
-    	'bubbleOverlay': {
-    	    deps: [],
-    	    exports: 'bubbleOverlay'
-	},
-    	'print': {
-    	    deps: [],
-    	    exports: 'print'
-	},
-        'jquery': {
-	    deps: [],
-	    exports: 'jquery'
-	},
-        'globalSettings': {
-	    deps: [],
-	    exports: 'globalSettings'
-	},
-        'laureateSettings': {
+    	    exports: 'utilHelpers'
+    	},
+            'socialShareUrl' : {
             deps: [],
-            exports: 'laureateSettings'
-	},
-        'laureateValidation': {
-            deps: [],
-            exports: 'laureateValidation'
-	},
-        'laureatesCrossfilters': {
-            deps: [],
-            exports: 'laureatesCrossfilters'
-	},
-        'laureatesCharts': {
-            deps: [],
-            exports: 'laureatesCharts'
-	},
-        'utilHelpers': {
-	    deps: [],
-	    exports: 'utilHelpers'
-	}
+            exports: 'socialShareUrl'
+        }
     }
 });
 
