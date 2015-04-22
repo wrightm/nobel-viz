@@ -1,6 +1,6 @@
 define(function (require) {
     
-
+    
     var state = "LAUREATES";
     var jquery = require('jquery');
     var dc = require('dc');
@@ -72,37 +72,11 @@ define(function (require) {
 	    
 	    laureatesCharts.setCrossfilters(laureatesCrossfilters);
 	    
-	    monthChart.on("filtered", function(chart, filter) {
-		var monthArray = monthChart.filters()[0];
-		if (monthArray != null) {
-		    currentFilters['month'] = [dateFormat(monthArray[0]), dateFormat(monthArray[1])];
-		} else {
-		    delete currentFilters['month'];
-		}
-		url.updateURL("/laureates.html", currentFilters);
-	    });
 	    
-	    maleOrFemaleChart.on("filtered", function(chart, filter) {
-		dc.events.trigger(function() {
-		    currentFilters['gender'] = maleOrFemaleChart.filters();
-		});
-		url.updateURL("/laureates.html", currentFilters);
-	    });
 	    
-	    prizeChart.on("filtered", function(chart, filter) {
-		dc.events.trigger(function() {
-		    currentFilters['prize'] = prizeChart.filters();
-		});
-		url.updateURL("/laureates.html", currentFilters);
-	    });
-	    
-	    seasonOfTheYearChart.on("filtered", function(chart, filter) {
-		dc.events.trigger(function() {
-		    currentFilters['season'] = seasonOfTheYearChart.filters();
-		});
-		url.updateURL("/laureates.html", currentFilters);
-	    });
-	    
+	    url.addURLFilteringToChart("/laureates.html", currentFilters, seasonOfTheYearChart, 'season');
+	    url.addURLFilteringToChart("/laureates.html", currentFilters, prizeChart, 'prize');
+	    url.addURLFilteringToChart("/laureates.html", currentFilters, maleOrFemaleChart, 'gender');
 	    laureatesCharts.render();
 	    
 	    var params = url.getFilteredParams();
@@ -124,8 +98,6 @@ define(function (require) {
 	    }
 	    
 	    dc.redrawAll();
-	    
-	    
 	});
     });
     

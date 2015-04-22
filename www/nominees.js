@@ -15,6 +15,7 @@ requirejs.config({
         'bubbleOverlay': '/app/modules/bubbles/bubble-overlay',
         'bubbleOverlayHelpers': '/app/modules/bubbles/helpers',
         'print': '/lib/print',
+	'url': '/app/modules/url',
         'jquery' : '/lib/jquery',
         'globalSettings' : '/app/modules/settings/global-settings',
         'nomineesSettings' : '/app/modules/settings/nominees-settings',
@@ -26,66 +27,70 @@ requirejs.config({
     },
     shim: {
         'crossfilter': {
-        deps: [],
-        exports: 'crossfilter'
-    },
+            deps: [],
+            exports: 'crossfilter'
+	},
+	'url': {
+	    deps: [],
+	    exports: 'url'
+	},
         'd3': {
-        deps: [],
-        exports: 'd3'
-    },
+            deps: [],
+            exports: 'd3'
+	},
         'colorbrewer': {
-        deps: [],
-        exports: 'colorbrewer'
-    },
+            deps: [],
+            exports: 'colorbrewer'
+	},
         'dc': {
-        deps: [],
-        exports: 'dc'
-    },
+            deps: [],
+            exports: 'dc'
+	},
         'topojson': {
-        deps: [],
-        exports: 'topojson'
-    },
+            deps: [],
+            exports: 'topojson'
+	},
         'bubbleOverlay': {
-        deps: [],
-        exports: 'bubbleOverlay'
-    },
+            deps: [],
+            exports: 'bubbleOverlay'
+	},
         'print': {
-        deps: [],
-        exports: 'print'
-    },
+            deps: [],
+            exports: 'print'
+	},
         'jquery': {
-        deps: [],
-        exports: 'jquery'
-    },
+            deps: [],
+            exports: 'jquery'
+	},
         'globalSettings': {
-        deps: [],
-        exports: 'globalSettings'
-    },
+            deps: [],
+            exports: 'globalSettings'
+	},
         'nomineesSettings': {
-        deps: [],
-        exports: 'nomineesSettings'
-    },
+            deps: [],
+            exports: 'nomineesSettings'
+	},
         'nomineesValidation': {
-        deps: [],
-        exports: 'nomineesValidation'
-    },
+            deps: [],
+            exports: 'nomineesValidation'
+	},
         'nomineesCrossfilters': {
-        deps: [],
-        exports: 'nomineesCrossfilters'
-    },
+            deps: [],
+            exports: 'nomineesCrossfilters'
+	},
         'nomineesCharts': {
-        deps: [],
-        exports: 'nomineesCharts'
-    },
+            deps: [],
+            exports: 'nomineesCharts'
+	},
         'nomineesFormatter': {
-        deps: [],
-        exports: 'nomineesFormatter'
-    },
+            deps: [],
+            exports: 'nomineesFormatter'
+	},
         'bootstrap': {
-        deps: ['jquery'],
-        exports: 'bootstrap'
+            deps: ['jquery'],
+            exports: 'bootstrap'
+	}
     }
-  }
 });
 
 // Start loading the main app file. Put all of

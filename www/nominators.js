@@ -16,6 +16,7 @@ requirejs.config({
         'bubbleOverlayHelpers': '/app/modules/bubbles/helpers',
         'print': '/lib/print',
         'jquery' : '/lib/jquery',
+	'url': '/app/modules/url',
         'globalSettings' : '/app/modules/settings/global-settings',
         'nominatorSettings' : '/app/modules/settings/nominator-settings',
         'nominatorValidation' : '/app/modules/validation/nominator-validation',
@@ -24,68 +25,73 @@ requirejs.config({
         'nominatorFormatter' : '/app/modules/formatters/nominator-formatter',
         'bootstrap' :  '/bower_components/bootstrap/dist/js/bootstrap' 
     },
-  	shim: {
+    shim: {
     	'crossfilter': {
-      	deps: [],
-      	exports: 'crossfilter'
-    },
+      	    deps: [],
+      	    exports: 'crossfilter'
+	},
+	'url': {
+	    deps: [],
+	    exports: 'url'
+	},
+	
     	'd3': {
-    	deps: [],
-    	exports: 'd3'
-    },
+    	    deps: [],
+    	    exports: 'd3'
+	},
     	'colorbrewer': {
-    	deps: [],
-    	exports: 'colorbrewer'
-    },
+    	    deps: [],
+    	    exports: 'colorbrewer'
+	},
     	'dc': {
-    	deps: [],
-    	exports: 'dc'
-    },
+    	    deps: [],
+    	    exports: 'dc'
+	},
     	'topojson': {
-    	deps: [],
-    	exports: 'topojson'
-    },
+    	    deps: [],
+    	    exports: 'topojson'
+	},
     	'bubbleOverlay': {
-    	deps: [],
-    	exports: 'bubbleOverlay'
-    },
+    	    deps: [],
+    	    exports: 'bubbleOverlay'
+	},
     	'print': {
-    	deps: [],
-    	exports: 'print'
-    },
+    	    deps: [],
+    	    exports: 'print'
+	},
         'jquery': {
-        deps: [],
-        exports: 'jquery'
-    },
+            deps: [],
+            exports: 'jquery'
+	},
         'globalSettings': {
-        deps: [],
-        exports: 'globalSettings'
-    },
+            deps: [],
+            exports: 'globalSettings'
+	},
         'nominatorSettings': {
-        deps: [],
-        exports: 'nominatorSettings'
-    },
+            deps: [],
+            exports: 'nominatorSettings'
+	},
         'nominatorValidation': {
-        deps: [],
-        exports: 'nominatorValidation'
-    },
+            deps: [],
+            exports: 'nominatorValidation'
+	},
         'nominatorCrossfilters': {
-        deps: [],
-        exports: 'nominatorCrossfilters'
-    },
+            deps: [],
+            exports: 'nominatorCrossfilters'
+	},
         'nominatorCharts': {
-        deps: [],
-        exports: 'nominatorCharts'
-    },
+            deps: [],
+            exports: 'nominatorCharts'
+	},
         'nominatorFormatter': {
-        deps: [],
-        exports: 'nominatorFormatter'
-    },
+            deps: [],
+            exports: 'nominatorFormatter'
+	},
         'bootstrap': {
-        deps: ['jquery'],
-        exports: 'bootstrap'
+            deps: ['jquery'],
+            exports: 'bootstrap'
+	}
     }
-  }
 });
 
 // Start loading the main app file. Put all of

@@ -15,6 +15,17 @@ define( function() {
     }
 
     /**
+     * Registers listener with chart so that the URL is updated whenever the data is filtered.
+     */
+    function addURLFilteringToChart(urlBase, currentFilters, chart, queryParam) {
+	chart.on("filtered", function(chart, filter) {
+	    currentFilters[queryParam] = chart.filters();
+	    updateURL(urlBase, currentFilters);
+	});
+    }
+    
+
+    /**
      * Generates the url query string from the filters passed. as currentFilters
      */
     function generateURLQuery(currentFilters) {
@@ -63,6 +74,8 @@ define( function() {
 
 	updateURL: updateURL,
 	
-	generateURLQuery: generateURLQuery 
+	generateURLQuery: generateURLQuery,
+	
+	addURLFilteringToChart: addURLFilteringToChart
     };
 });
