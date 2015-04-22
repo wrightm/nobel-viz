@@ -75,6 +75,7 @@ define(function (require) {
 	    url.addURLFilteringToChart("/laureates.html", currentFilters, seasonOfTheYearChart, 'season');
 	    url.addURLFilteringToChart("/laureates.html", currentFilters, prizeChart, 'prize');
 	    url.addURLFilteringToChart("/laureates.html", currentFilters, maleOrFemaleChart, 'gender');
+        url.addURLDateRangeFiltering("/laureates.html", currentFilters, monthChart, 'laureateBirth');
 	    laureatesCharts.render();
 	    
 	    var params = url.getFilteredParams();
@@ -94,6 +95,11 @@ define(function (require) {
     		    prizeChart.filter(prize);
     		});
 	    }
+
+        if (params['laureateBirth'] != null) {
+            var dateTimeFilter = [new Date(params['laureateBirth'][0]),new Date(params['laureateBirth'][1])];
+            monthChart.filter(dc.filters.RangedTwoDimensionalFilter(dateTimeFilter));
+        }
 	    
 	    dc.redrawAll();
 	   });

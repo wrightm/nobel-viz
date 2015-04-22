@@ -16,7 +16,7 @@ requirejs.config({
         'bubbleOverlayHelpers': '/app/modules/bubbles/helpers',
         'print': '/lib/print',
         'jquery' : '/lib/jquery',
-	    'url': '/app/modules/url',
+	    'url': '/app/modules/urlfilter/url',
         'globalSettings' : '/app/modules/settings/global-settings',
         'nominatorSettings' : '/app/modules/settings/nominator-settings',
         'nominatorValidation' : '/app/modules/validation/nominator-validation',

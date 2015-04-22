@@ -15,7 +15,7 @@ requirejs.config({
         'bubbleOverlay': '/app/modules/bubbles/bubble-overlay',
         'bubbleOverlayHelpers': '/app/modules/bubbles/helpers',
         'print': '/lib/print',
-	    'url': '/app/modules/url',
+	    'url': '/app/modules/urlfilter/url',
         'jquery' : '/lib/jquery',
         'globalSettings' : '/app/modules/settings/global-settings',
         'laureateSettings' : '/app/modules/settings/laureate-settings',

@@ -80,6 +80,8 @@ define(function (require) {
     		
     		url.addURLFilteringToChart("/nominees.html", currentFilters, prizeChart, 'prize');
     		url.addURLFilteringToChart("/nominees.html", currentFilters, maleOrFemaleChart, 'gender');
+            url.addURLDateRangeFiltering("/nominees.html", currentFilters, yearOfBirthChart, 'nominatorBirth');
+            url.addURLDateRangeFiltering("/nominees.html", currentFilters, nominatorYearChart, 'nominatorYear');
     		
     		nomineesCharts.render();
     		
@@ -95,6 +97,14 @@ define(function (require) {
     			   prizeChart.filter(prize);
     		    });
     		}
+            if (params['nominatorBirth'] != null) {
+                var dateTimeFilter = [new Date(params['nominatorBirth'][0]),new Date(params['nominatorBirth'][1])];
+                yearOfBirthChart.filter(dc.filters.RangedTwoDimensionalFilter(dateTimeFilter));
+            }
+            if (params['nominatorYear'] != null) {
+                var dateTimeFilter = [new Date(params['nominatorYear'][0]),new Date(params['nominatorYear'][1])];
+                nominatorYearChart.filter(dc.filters.RangedTwoDimensionalFilter(dateTimeFilter));
+            }
     		
     		dc.redrawAll();
 	    });
