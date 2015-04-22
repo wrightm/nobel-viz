@@ -15,6 +15,7 @@ requirejs.config({
         'bubbleOverlay': '/app/modules/bubbles/bubble-overlay',
         'bubbleOverlayHelpers': '/app/modules/bubbles/helpers',
         'print': '/lib/print',
+	'url': '/app/modules/url',
         'jquery' : '/lib/jquery',
         'globalSettings' : '/app/modules/settings/global-settings',
         'laureateSettings' : '/app/modules/settings/laureate-settings',
@@ -22,60 +23,68 @@ requirejs.config({
         'laureatesCrossfilters' : '/app/modules/crossfilters/laureates-crossfilters',
         'laureatesCharts' : '/app/modules/charts/laureates-charts'
     },
-  	shim: {
+    shim: {
     	'crossfilter': {
-      	deps: [],
-      	exports: 'crossfilter'
-    },
-    	'd3': {
-    	deps: [],
-    	exports: 'd3'
-    },
+      	    deps: [],
+      	    exports: 'crossfilter'
+	},
+	'url': {
+	    deps: [],
+	    exports: 'url'
+	},
+      	'd3': {
+    	    deps: [],
+    	    exports: 'd3'
+	},
     	'colorbrewer': {
-    	deps: [],
-    	exports: 'colorbrewer'
-    },
+    	    deps: [],
+    	    exports: 'colorbrewer'
+	},
     	'dc': {
-    	deps: [],
-    	exports: 'dc'
-    },
+    	    deps: [],
+    	    exports: 'dc'
+	},
     	'topojson': {
-    	deps: [],
-    	exports: 'topojson'
-    },
+    	    deps: [],
+    	    exports: 'topojson'
+	},
     	'bubbleOverlay': {
-    	deps: [],
-    	exports: 'bubbleOverlay'
-    },
+    	    deps: [],
+    	    exports: 'bubbleOverlay'
+	},
     	'print': {
-    	deps: [],
-    	exports: 'print'
-    },
+    	    deps: [],
+    	    exports: 'print'
+	},
         'jquery': {
-        deps: [],
-        exports: 'jquery'
-    },
+	    deps: [],
+	    exports: 'jquery'
+	},
         'globalSettings': {
-        deps: [],
-        exports: 'globalSettings'
-    },
+	    deps: [],
+	    exports: 'globalSettings'
+	},
         'laureateSettings': {
-        deps: [],
-        exports: 'laureateSettings'
-    },
+            deps: [],
+            exports: 'laureateSettings'
+	},
         'laureateValidation': {
-        deps: [],
-        exports: 'laureateValidation'
-    },
+            deps: [],
+            exports: 'laureateValidation'
+	},
         'laureatesCrossfilters': {
-        deps: [],
-        exports: 'laureatesCrossfilters'
-    },
+            deps: [],
+            exports: 'laureatesCrossfilters'
+	},
         'laureatesCharts': {
-        deps: [],
-        exports: 'laureatesCharts'
+            deps: [],
+            exports: 'laureatesCharts'
+	},
+        'utilHelpers': {
+	    deps: [],
+	    exports: 'utilHelpers'
+	}
     }
-  }
 });
 
 // Start loading the main app file. Put all of
