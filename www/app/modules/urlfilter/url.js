@@ -26,7 +26,7 @@ define( function() {
 
     function addURLDateRangeFiltering(urlBase,currentFilters, chart, queryParam){
     	chart.on("filtered", function(chart, filter) {
-    		var filters = [chart.filters()[0][0],chart.filters()[0][1]];
+    	    var filters = [chart.filters()[0][0].toISOString(),chart.filters()[0][1].toISOString()];
 		    currentFilters[queryParam] = filters;
 		    updateURL(urlBase, currentFilters);
 		});
