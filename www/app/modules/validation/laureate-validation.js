@@ -4,6 +4,8 @@ define(function (require) {
 	var dateFormat = d3.time.format('%Y-%m-%d');
       var numberFormat = d3.format('.2f');
 
+      var laureateFormatter = require('laureateFormatter');
+
 	function isValid(laureate,property){
 		if(laureate[property] == undefined || laureate[property] == null || laureate[property] == ""){
 			return false;
@@ -11,57 +13,82 @@ define(function (require) {
 		return true;
 	};
 
-	function laureateDataValidation(laureates){
-
+      function isCityAndCountryVaild(laureate,latsAndLons){
+            var country = laureate.country;
+            var city = laureate.city;
+            if(country in latsAndLons){
+                  var latsAndLonsCountry = latsAndLons[country];
+                  if(city in latsAndLonsCountry){
+                    var latsAndLonsCity = latsAndLonsCountry[city];
+                    return true;
+                  }
+            }
+            return false;
+      };
+      
+      function laureateDataValidation(laureates,latsAndLons){
+            var failures = {
+                  "city":0,
+                  "prize":0,
+                  "dateOfBirth":0,
+                  "gender":0,
+                  "awardedYear":0,
+                  "country":0,
+                  "cityAndCountry": 0
+            };
+            var passed = 0;
+            var numberOfLaureates = laureates.length;
 		function isLaureateValid(laureate){
-      		if(!isValid(laureate,"bornCity")){
-      			return false;
-      		}
-      		if(!isValid(laureate,"prize")){
-      			return false;
-      		}
-      		if(!isValid(laureate,"month_born")){
-      			return false;
-      		}
-      		if(!isValid(laureate,"gender")){
-      			return false;
-      		}
-      		if(!isValid(laureate,"born")){
-      			return false;
-      		}
-      		if(!isValid(laureate,"lat")){
-      			return false;
-      		}
-      		if(!isValid(laureate,"lon")){
-      			return false;
-      		}
-      		if(!isValid(laureate,"month_born")){
-      			return false;
-      		}
-      		if(!isValid(laureate,"day_born")){
-      			return false;
-      		}
-      		return true;
+      		var pass = true;
+                  if(!isValid(laureate,"city")){
+                        failures.city += 1;
+                        pass = false;
+                  }
+                  if(!isValid(laureate,"prize")){
+                        failures.prize += 1;
+                        pass = false;
+                  }
+                  if(!isValid(laureate,"dateOfBirth")){
+                        failures.dateOfBirth += 1;
+                        pass = false;
+                  }
+                  if(!isValid(laureate,"gender")){
+                        failures.gender += 1;
+                        pass = false;
+                  }
+                  if(!isValid(laureate,"awardedYear")){
+                        failures.awardedYear += 1;
+                        pass = false;
+                  }
+                  if(!isValid(laureate,"country")){
+                        failures.country += 1;
+                        pass = false;
+                  }
+                  if(!isCityAndCountryVaild(laureate,latsAndLons)){
+                    failures.cityAndCountry += 1;
+                    pass = false;
+                  }
+                  return pass;
       	};
 		
 		var validatedData = [];
-		laureates.forEach(function (laureate) {
-                  laureate.gender === "male" ? 'Male' : 'Female';
-                  laureate.born = dateFormat.parse(laureate.born);
-                  laureate.lat = laureate.bornCityLatLon[0];
-                  laureate.lon = laureate.bornCityLatLon[1]; 
-                  laureate.month_born = d3.time.month(laureate.born);
-                  laureate.day_born = d3.time.day(laureate.born);
-            	if(isLaureateValid(laureate)){				
-                    validatedData.push(laureate);
-            	}
-      	});
-		return validatedData;	
-	};
+            laureates.forEach(function (laureate) {
+                  if(isLaureateValid(laureate)){
+                        laureateFormatter.format(laureate);
+                        validatedData.push(laureate);
+                        passed += 1;
+                  }
+            });
+            console.log("summary: numberOfLaureates = ",numberOfLaureates, 
+            " passed = ", passed, 
+            " failures = ",failures, 
+            " % of passes = ", passed / numberOfLaureates);
+            return validatedData;	
+      };
 
 	return {
-		laureateDataValidation : function(data){
-			return laureateDataValidation(data);
+		laureateDataValidation : function(laureates,latsAndLons){
+			return laureateDataValidation(laureates,latsAndLons);
 		}
 	}
 });

@@ -4,8 +4,8 @@ define(function (require) {
 	var d3 = require('d3');
 
 	var maleOrFemaleChart = dc.pieChart('#male-female-chart');
-	var seasonOfTheYearChart = dc.rowChart('#season-of-the-year-chart');
-	var monthChart = dc.barChart('#month-chart');
+	var yearOfBirthChart = dc.barChart('#year-of-birth-chart');
+	var awardedYearChart = dc.barChart('#year-of-award-chart');
 	var prizeChart = dc.rowChart('#prize-chart');
 
 	function LaureatesCharts(){
@@ -15,11 +15,11 @@ define(function (require) {
 		maleOrFemaleChart : function(){
 			return maleOrFemaleChart;
 		},
-		seasonOfTheYearChart : function(){
-			return seasonOfTheYearChart;
+		yearOfBirthChart : function(){
+			return yearOfBirthChart;
 		},
-		monthChart : function(){
-			return monthChart;
+		awardedYearChart : function(){
+			return awardedYearChart;
 		},
 		prizeChart : function(){
 			return prizeChart;
@@ -31,16 +31,16 @@ define(function (require) {
           var laureatesAll = laureatesCrossfilters.getAll();
           
           setupMaleOrFemaleChart(laureatesDimensions,laureatesGroups,laureatesAll);
-          setupSeasonOfTheYearChart(laureatesDimensions,laureatesGroups);
+          setupYearOfBirthChartChart(laureatesDimensions,laureatesGroups);
           setupPrizeChart(laureatesDimensions,laureatesGroups);
-          setupMonthChart(laureatesDimensions,laureatesGroups);
+          setupAwardedYearChartChart(laureatesDimensions,laureatesGroups);
 
 		},
 		render : function(){
 			maleOrFemaleChart.render();
-			seasonOfTheYearChart.render();
+			yearOfBirthChart.render();
 			prizeChart.render();
-			monthChart.render();
+			awardedYearChart.render();
 		}
 	};
 
@@ -80,24 +80,22 @@ define(function (require) {
 
 	};
 
-	function setupSeasonOfTheYearChart(laureatesDimensions,laureatesGroups){
-		seasonOfTheYearChart
-        .width(180)
-        .height(180)
-        .margins({top: 20, left: 10, right: 10, bottom: 20})
-        .group(laureatesGroups.seasonOfTheYear)
-        .dimension(laureatesDimensions.seasonOfTheYear)
-        // assign colors to each value in the x scale domain
-        .ordinalColors(['#3182bd', '#6baed6', '#9ecae1', '#c6dbef'])
-        .label(function (d) {
-            return d.key;
-        })
-        // title sets the row text
-        .title(function (d) {
-            return d.value;
-        })
-        .elasticX(true)
-        .xAxis().ticks(4);
+	function setupYearOfBirthChartChart(laureatesDimensions,laureatesGroups){
+		var minYearOfBirth = new Date(Number(laureatesDimensions.yearOfBirth.bottom(1)[0].dateOfBirth),0,1);
+        var maxYearOfBirth = new Date(Number(laureatesDimensions.yearOfBirth.top(1)[0].dateOfBirth),0,1);
+
+        yearOfBirthChart
+        .width(990)
+        .height(40)
+        .margins({top: 0, right: 50, bottom: 20, left: 40})
+        .group(laureatesGroups.yearOfBirth)
+        .dimension(laureatesDimensions.yearOfBirth)
+        .centerBar(true)
+        .gap(1)
+        .x(d3.time.scale().domain([minYearOfBirth, maxYearOfBirth]))
+        .round(d3.time.year.round)
+        .alwaysUseRounding(true)
+        .xUnits(d3.time.years);
 	};
 
 	function setupPrizeChart(laureatesDimensions,laureatesGroups){
@@ -120,19 +118,22 @@ define(function (require) {
         .xAxis().ticks(4);
 	};
 
-	function setupMonthChart(laureatesDimensions,laureatesGroups){
-		monthChart
+	function setupAwardedYearChartChart(laureatesDimensions,laureatesGroups){
+		var minYAwardYear = new Date(Number(laureatesDimensions.awardedYear.bottom(1)[0].awardedYear),0,1);
+        var maxYAwardYear = new Date(Number(laureatesDimensions.awardedYear.top(1)[0].awardedYear),0,1);
+
+        awardedYearChart
         .width(990)
         .height(40)
         .margins({top: 0, right: 50, bottom: 20, left: 40})
-        .group(laureatesGroups.months)
-        .dimension(laureatesDimensions.months)
+        .group(laureatesGroups.awardedYear)
+        .dimension(laureatesDimensions.awardedYear)
         .centerBar(true)
         .gap(1)
-        .x(d3.time.scale().domain([new Date(1840, 0, 1), new Date(1980, 11, 31)]))
-        .round(d3.time.month.round)
+        .x(d3.time.scale().domain([minYAwardYear, maxYAwardYear]))
+        .round(d3.time.year.round)
         .alwaysUseRounding(true)
-        .xUnits(d3.time.months);
+        .xUnits(d3.time.years);
 	};
 
 	return LaureatesCharts;

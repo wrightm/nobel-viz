@@ -80,8 +80,8 @@ define(function (require) {
     		
     		url.addURLFilteringToChart("/nominees.html", currentFilters, prizeChart, 'prize');
     		url.addURLFilteringToChart("/nominees.html", currentFilters, maleOrFemaleChart, 'gender');
-            url.addURLDateRangeFiltering("/nominees.html", currentFilters, yearOfBirthChart, 'nominatorBirth');
-            url.addURLDateRangeFiltering("/nominees.html", currentFilters, nominatorYearChart, 'nominatorYear');
+            url.addURLFilteringToChart("/nominees.html", currentFilters, yearOfBirthChart, 'nominatorBirth');
+            url.addURLFilteringToChart("/nominees.html", currentFilters, nominatorYearChart, 'nominatorYear');
     		
     		nomineesCharts.render();
     		

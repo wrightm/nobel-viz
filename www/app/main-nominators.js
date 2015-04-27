@@ -79,13 +79,13 @@ define(function (require) {
     		
     		url.addURLFilteringToChart("/nominators.html", currentFilters, prizeChart, 'prize');
     		url.addURLFilteringToChart("/nominators.html", currentFilters, maleOrFemaleChart, 'gender');
-		    url.addURLDateRangeFiltering("/nominators.html", currentFilters, yearOfBirthChart, 'nominatorBirth');
-            url.addURLDateRangeFiltering("/nominators.html", currentFilters, nominatorYearChart, 'nominatorYear');
+		    url.addURLFilteringToChart("/nominators.html", currentFilters, yearOfBirthChart, 'nominatorBirth');
+            url.addURLFilteringToChart("/nominators.html", currentFilters, nominatorYearChart, 'nominatorYear');
 		
 		
 		    nominatorCharts.render();
 		
-	  	  var params = url.getFilteredParams();
+	  	    var params = url.getFilteredParams();
 		
     		if (params['gender'] != null) {
     		    params['gender'].forEach(function (gender) {

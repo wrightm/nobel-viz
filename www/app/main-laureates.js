@@ -11,6 +11,7 @@ define(function (require) {
     var laureateSettings = require('laureateSettings');
     var LaureatesCrossfilters = require('laureatesCrossfilters');
     var LaureatesCharts = require('laureatesCharts');
+    var bootstrap = require('bootstrap');
     var socialShareUrl = require('socialShareUrl');
     
     var url = require('url');
@@ -32,8 +33,8 @@ define(function (require) {
     
     var laureatesCharts = new LaureatesCharts();
     var maleOrFemaleChart = laureatesCharts.maleOrFemaleChart();
-    var seasonOfTheYearChart = laureatesCharts.seasonOfTheYearChart();
-    var monthChart = laureatesCharts.monthChart();
+    var yearOfBirthChart = laureatesCharts.yearOfBirthChart();
+    var awardedYearChart = laureatesCharts.awardedYearChart();
     var prizeChart = laureatesCharts.prizeChart();
     var worldChart = globalSettings.worldChart();
     
@@ -50,69 +51,70 @@ define(function (require) {
             .attr("class", "border border--state")
             .attr("d", path);
 	
-	   d3.json("/data/laureates-world.json", function(error, data) {
+        d3.json("/data/laureates.json", function(error, data) {
+            d3.json("/data/lats-lons.json", function(error, latsAndLons) {
 	    
-	    data = laureateSettings.validate(data);
-	    
-	    var laureatesCrossfilters = new LaureatesCrossfilters(data,projection);
-	    var laureates = laureatesCrossfilters.getLaureates();
-	    var laureatesAll = laureatesCrossfilters.getAll();
-	    var bubbleOverlayData = laureatesCrossfilters.getBubbleOverlayData();
-	    globalSettings.setBubbleOverlayData(bubbleOverlayData);
-	    globalSettings.setState(state);
-	    
-	    var overlay = new bubbleOverlay(worldChart,bubbleOverlayData);
-	    overlay.render(1,state);
-	    
-	    // count all the facts
-	    dc.dataCount(".dc-data-count")
-  		.dimension(laureates)
-  		.group(laureatesAll)
-  		.render();
-	    
-	    laureatesCharts.setCrossfilters(laureatesCrossfilters);
-	    
-	    url.addURLFilteringToChart("/laureates.html", currentFilters, seasonOfTheYearChart, 'season');
-	    url.addURLFilteringToChart("/laureates.html", currentFilters, prizeChart, 'prize');
-	    url.addURLFilteringToChart("/laureates.html", currentFilters, maleOrFemaleChart, 'gender');
-        url.addURLDateRangeFiltering("/laureates.html", currentFilters, monthChart, 'laureateBirth');
-	    laureatesCharts.render();
-	    
-	    var params = url.getFilteredParams();
-	    
-	    if (params['season'] != null) {
-    		params['season'].forEach(function (day) {
-    		    seasonOfTheYearChart.filter(day);
-    		});
-	    }
-	    if (params['gender'] != null) {
-    		params['gender'].forEach(function (gender) {
-    		    maleOrFemaleChart.filter(gender);
-    		});
-	    }
-	    if (params['prize'] != null) {
-    		params['prize'].forEach(function(prize) {
-    		    prizeChart.filter(prize);
-    		});
-	    }
-
-        if (params['laureateBirth'] != null) {
-            var dateTimeFilter = [new Date(params['laureateBirth'][0]),new Date(params['laureateBirth'][1])];
-            monthChart.filter(dc.filters.RangedTwoDimensionalFilter(dateTimeFilter));
-        }
-	    
-	    dc.redrawAll();
+        	    data = laureateSettings.validate(data,latsAndLons);
+        	    
+        	    var laureatesCrossfilters = new LaureatesCrossfilters(data,latsAndLons,projection);
+        	    var laureates = laureatesCrossfilters.getLaureates();
+        	    var laureatesAll = laureatesCrossfilters.getAll();
+        	    var bubbleOverlayData = laureatesCrossfilters.getBubbleOverlayData();
+        	    globalSettings.setBubbleOverlayData(bubbleOverlayData);
+        	    globalSettings.setState(state);
+        	    
+        	    var overlay = new bubbleOverlay(worldChart,bubbleOverlayData);
+        	    overlay.render(1,state);
+        	    
+        	    // count all the facts
+        	    dc.dataCount(".dc-data-count")
+          		.dimension(laureates)
+          		.group(laureatesAll)
+          		.render();
+        	    
+        	    laureatesCharts.setCrossfilters(laureatesCrossfilters);
+        	    
+        	    url.addURLFilteringToChart("/laureates.html", currentFilters, awardedYearChart, 'awardYear');
+        	    url.addURLFilteringToChart("/laureates.html", currentFilters, prizeChart, 'prize');
+        	    url.addURLFilteringToChart("/laureates.html", currentFilters, maleOrFemaleChart, 'gender');
+                url.addURLFilteringToChart("/laureates.html", currentFilters, yearOfBirthChart, 'yearOfBirth');
+        	    laureatesCharts.render();
+        	    
+        	    var params = url.getFilteredParams();
+        	    
+        	    if (params['awardYear'] != null) {
+                    var dateTimeFilter = [new Date(params['awardYear'][0]),new Date(params['awardYear'][1])];
+                    awardedYearChart.filter(dc.filters.RangedTwoDimensionalFilter(dateTimeFilter));
+                }
+        	    if (params['gender'] != null) {
+            		params['gender'].forEach(function (gender) {
+            		    maleOrFemaleChart.filter(gender);
+            		});
+        	    }
+        	    if (params['prize'] != null) {
+            		params['prize'].forEach(function(prize) {
+            		    prizeChart.filter(prize);
+            		});
+        	    }
+                if (params['yearOfBirth'] != null) {
+                    var dateTimeFilter = [new Date(params['yearOfBirth'][0]),new Date(params['yearOfBirth'][1])];
+                    yearOfBirthChart.filter(dc.filters.RangedTwoDimensionalFilter(dateTimeFilter));
+                }
+        	    
+        	    dc.redrawAll();
+        });
 	   });
     });
     
-    jquery( "#month-chart-reset" ).click(function() {
-    	monthChart.filterAll();
+    jquery( "#year-of-birth-chart-reset" ).click(function() {
+        delete currentFilters['yearOfBirth'];
+    	yearOfBirthChart.filterAll();
     	dc.redrawAll();
     });
     
-    jquery( "#season-of-the-year-chart-reset" ).click(function() {
-    	delete currentFilters['season'];
-    	seasonOfTheYearChart.filterAll();
+    jquery( "#year-of-award-chart-reset" ).click(function() {
+    	delete currentFilters['awardYear'];
+    	awardedYearChart.filterAll();
     	dc.redrawAll();
     });
     
@@ -133,6 +135,11 @@ define(function (require) {
     	currentFilters = {};
     	dc.filterAll();
     	dc.redrawAll();
+    });
+
+    jquery('#timeline a').click(function (e) {
+        e.preventDefault()
+        $(this).tab('show')
     });
     
     socialShareUrl.shareUrl();

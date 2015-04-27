@@ -2,13 +2,13 @@ define(function (require) {
 
 	var crossfilter = require('crossfilter');
 
-	function LaureatesCrossfilters(laureates,projection){
+	function LaureatesCrossfilters(laureates,latsAndLons,projection){
 		this.laureates = crossfilter(laureates);
 		this.all = this.laureates.groupAll();
 		this.dimensionsAndGroups = constructDimensionsAndGroups(this.laureates);
 		this.dimensions = this.dimensionsAndGroups.dimensions;
 		this.groups = this.dimensionsAndGroups.groups;
-		this.bubbleOverlayData = constructBubbleOverlayData(laureates,this.dimensions,this.groups,projection);
+		this.bubbleOverlayData = constructBubbleOverlayData(laureates,latsAndLons,this.dimensions,this.groups,projection);
 	};
 
 	LaureatesCrossfilters.prototype = {
@@ -35,47 +35,30 @@ define(function (require) {
 		var groups = {};
 
 		// dimension by month
-		var monthsDimension = laureates.dimension(function (d) {
-			return d.month_born;
+		var yearOfBirthDimension = laureates.dimension(function (d) {
+			return new Date(Number(d.dateOfBirth),0,1);
 		});
-		var monthsGroup = monthsDimension.group();
+		var yearOfBirthGroup = yearOfBirthDimension.group();
 
-		dimensions["months"] = monthsDimension;
-		groups["months"] = monthsGroup;
+		dimensions["yearOfBirth"] = yearOfBirthDimension;
+		groups["yearOfBirth"] = yearOfBirthGroup;
+
+		var awardedYearDimension = laureates.dimension(function (d) {
+			return new Date(Number(d.awardedYear),0,1);
+		});
+		var awardedYearGroup = awardedYearDimension.group();
+
+		dimensions["awardedYear"] = awardedYearDimension;
+		groups["awardedYear"] = awardedYearGroup;
 
 		// male or female
 		var gender = laureates.dimension(function (d) {
-			return d.gender === "male" ? 'Male' : 'Female';
+			return d.gender === "M" ? 'Male' : 'Female';
 		});
 		var genderGroup = gender.group();
 
 		dimensions["gender"] = gender;
 		groups["gender"] = genderGroup;
-
-		var seasonOfTheYear = laureates.dimension(function (d) {
-			
-			function season(month){
-				if(month == 11 || month == 0 || month == 1){
-					return "Winter";
-				}
-				else if(month == 2 || month == 3 || month == 4){
-					return "Spring";
-				}
-				else if(month == 5 || month == 6 || month == 7){
-					return "Summer";
-				}
-				else if(month == 8 || month == 9 || month == 10){
-					return "Autumn";
-				}
-			}
-
-			var month = d.born.getMonth();
-			return season(month);
-		});
-		var seasonOfTheYearGroup = seasonOfTheYear.group();
-
-		dimensions["seasonOfTheYear"] = seasonOfTheYear;
-		groups["seasonOfTheYear"] = seasonOfTheYearGroup;
 
 		var prize = laureates.dimension(function(d){
 			return d.prize;
@@ -85,21 +68,21 @@ define(function (require) {
 		dimensions["prize"] = prize;
 		groups["prize"] = prizeGroup;
 
-		var bornCity =  laureates.dimension(function (d) {
-			return d.bornCity;
+		var city =  laureates.dimension(function (d) {
+			return d.city;
 		});
-		var bornCityGroup = bornCity.group();
+		var cityGroup = city.group();
 
-		dimensions["bornCity"] = bornCity;
-		groups["bornCity"] = bornCityGroup;
+		dimensions["city"] = city;
+		groups["city"] = cityGroup;
 
-		var bornCountry = laureates.dimension(function(d){
-			return d.bornCountryCode;
+		var country = laureates.dimension(function(d){
+			return d.country;
 		});
-		var bornCountryGroup = bornCountry.group();
+		var countryGroup = country.group();
 
-		dimensions["bornCountry"] = bornCountry;
-		groups["bornCountry"] = bornCountryGroup;
+		dimensions["country"] = country;
+		groups["country"] = countryGroup;
 
 		var dimensionsAndGroups = {
 			"dimensions" : dimensions,
@@ -109,26 +92,39 @@ define(function (require) {
 		return dimensionsAndGroups
 	};
 
-	function constructBubbleOverlayData(data,dimensions,groups,projection){
+	function constructBubbleOverlayData(laureates,latsAndLons,dimensions,groups,projection){
 		var bornCountryPoints = [];
       	var bornCityPoints = [];
-      	data.forEach(function(laureate){
-        	var bornCityCoordinates = projection([laureate.bornCityLatLon[1],laureate.bornCityLatLon[0]]);
-        	if(bornCityCoordinates !== null){
-          		bornCityPoints.push({name:laureate.bornCity, x:bornCityCoordinates[0], y:bornCityCoordinates[1]});
-        	}
-        	var bornCountryCoordinates = projection([laureate.bornCountryLatLon[1],laureate.bornCountryLatLon[0]]);
-        	if(bornCountryCoordinates !== null){
-          		bornCountryPoints.push({name:laureate.bornCountryCode, x:bornCountryCoordinates[0], y:bornCountryCoordinates[1]});
-        	}
+      	laureates.forEach(function(laureate){
+      		var country = laureate.country;
+      		var city = laureate.city;
+      		if(country in latsAndLons){
+      			var latsAndLonsCountry = latsAndLons[country];
+      			var countryLat = latsAndLonsCountry["country lat"];
+      			var countryLon = latsAndLonsCountry["country lon"];
+      			if(city in latsAndLonsCountry){
+      				var latsAndLonsCity = latsAndLonsCountry[city];
+      				var cityLat = latsAndLonsCity["lat"];
+      				var cityLon = latsAndLonsCity["lon"];
+      				var bornCityCoordinates = projection([cityLon,cityLat]);
+			    	if(bornCityCoordinates !== null && city !== null){
+			      		bornCityPoints.push({name:city, x:bornCityCoordinates[0], y:bornCityCoordinates[1]});
+			    	}
+		        	var bornCountryCoordinates = projection([countryLon,countryLat]);
+		        	if(bornCountryCoordinates !== null && country !== null){
+		          		bornCountryPoints.push({name:country, x:bornCountryCoordinates[0], y:bornCountryCoordinates[1]});
+		        	}
+      			}
+      		}
+
       	});
       	
       	var bubbleOverlayData = {};
-      	bubbleOverlayData.cityDimension = dimensions.bornCity;
-      	bubbleOverlayData.cityGroup = groups.bornCity;
+      	bubbleOverlayData.cityDimension = dimensions.city;
+      	bubbleOverlayData.cityGroup = groups.city;
       	bubbleOverlayData.cityPoints = bornCityPoints;
-      	bubbleOverlayData.countryDimension = dimensions.bornCountry;
-      	bubbleOverlayData.countryGroup = groups.bornCountry;
+      	bubbleOverlayData.countryDimension = dimensions.country;
+      	bubbleOverlayData.countryGroup = groups.country;
       	bubbleOverlayData.countryPoints = bornCountryPoints;
       	return bubbleOverlayData;
 	};

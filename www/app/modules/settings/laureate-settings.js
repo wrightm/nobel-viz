@@ -6,8 +6,8 @@ define(function (require) {
 	};
 
 	LaureateSettings.prototype = {
-		validate : function(data){
-			return laureateValidation.laureateDataValidation(data);
+		validate : function(data,latsAndLons){
+			return laureateValidation.laureateDataValidation(data,latsAndLons);
 		}
 	};
 

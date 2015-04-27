@@ -24,15 +24,6 @@ define( function() {
 		});
     }
 
-    function addURLDateRangeFiltering(urlBase,currentFilters, chart, queryParam){
-    	chart.on("filtered", function(chart, filter) {
-    	    var filters = [chart.filters()[0][0].toISOString(),chart.filters()[0][1].toISOString()];
-		    currentFilters[queryParam] = filters;
-		    updateURL(urlBase, currentFilters);
-		});
-    }
-    
-
     /**
      * Generates the url query string from the filters passed. as currentFilters
      */
@@ -87,8 +78,6 @@ define( function() {
 		
 		generateURLQuery: generateURLQuery,
 		
-		addURLFilteringToChart: addURLFilteringToChart,
-
-		addURLDateRangeFiltering : addURLDateRangeFiltering
+		addURLFilteringToChart: addURLFilteringToChart
     };
 });

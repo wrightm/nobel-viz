@@ -22,6 +22,8 @@ requirejs.config({
         'laureateValidation' : '/app/modules/validation/laureate-validation',
         'laureatesCrossfilters' : '/app/modules/crossfilters/laureates-crossfilters',
         'laureatesCharts' : '/app/modules/charts/laureates-charts',
+        'laureateFormatter' : '/app/modules/formatters/laureate-formatter',
+        'bootstrap' :  '/bower_components/bootstrap/dist/js/bootstrap',
         'socialShareUrl' : '/app/modules/social/social-share-url'
     },
     shim: {
@@ -81,10 +83,18 @@ requirejs.config({
                 deps: [],
                 exports: 'laureatesCharts'
     	},
+            'laureateFormatter': {
+                deps: [],
+                exports: 'laureateFormatter'
+        },
             'utilHelpers': {
     	    deps: [],
     	    exports: 'utilHelpers'
     	},
+            'bootstrap': {
+                deps: ['jquery'],
+                exports: 'bootstrap'
+        },
             'socialShareUrl' : {
             deps: [],
             exports: 'socialShareUrl'

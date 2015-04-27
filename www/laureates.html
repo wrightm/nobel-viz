@@ -111,7 +111,7 @@
 			</div>
 		</div>
 		<div class="row">
-
+			<div class="col-md-2"></div>
 			<div id="prize-chart" class="col-md-4">
 		        <strong>Prize Category of Laureates</strong>
 		        <a id="prize-chart-reset" class="reset pointer">reset</a>
@@ -122,20 +122,42 @@
 		        <a id="male-female-chart-reset" class="reset pointer">reset</a>
 		        <div class="clearfix"></div>
 		    </div>
-		    <div id="season-of-the-year-chart" class="col-md-4">
-		        <strong>Season Laureates Were Born</strong>
-		        <a id="season-of-the-year-chart-reset" class="reset pointer">reset</a>
-		        <div class="clearfix"></div>
-		    </div>
 		</div>
+		</br>
+		<div role="tabpanel">
 
-		<div class="row">
+			<!-- Nav tabs -->
+			<div class="row">
+				<ul id="timeline" class="nav nav-tabs col-md-10" role="tablist">
+					<li role="presentation" class="active"><a href="#year-of-birth" aria-controls="year-of-birth" role="tab" data-toggle="tab">Year Of Birth</a></li>
+					<li role="presentation"><a href="#year-of-award" aria-controls="year-of-award" role="tab" data-toggle="tab">Year of Award</a></li>
+				</ul>
+			<div>
 			</br>
-			<div id="month-chart">
-		        <p class="text-center"><strong>Laureates by Date of Birth</strong></p>
-		        <a id="month-chart-reset" class="reset pointer">reset</a>
-		        <div class="clearfix"></div>
+		    <!-- Tab panes -->
+		    <div class="tab-content">
+			<div role="tabpanel" class="tab-pane active" id="year-of-birth">
+				<div class="row" id="year-of-birth">
+				</br>
+				<div id="year-of-birth-chart">
+			        <p class="text-center"><strong>Laureates by Year of Birth</strong></p>
+			        <a id="year-of-birth-chart-reset" class="reset pointer">reset</a>
+			    	<div class="clearfix"></div>
+				</div>
+				</div>
+			</div>
+		    <div role="tabpanel" class="tab-pane" id="year-of-award">
+		    	<div class="row" id="year-of-award">
+					</br>
+					<div id="year-of-award-chart">
+				        <p class="text-center"><strong>Laureates by Award Year</strong></p>
+				        <a id="year-of-award-chart-reset" class="reset pointer">reset</a>
+				        <div class="clearfix"></div>
+				    </div>
+				</div>
 		    </div>
+		  </div>
+
 		</div>
 
 		<div class="row">
@@ -158,7 +180,7 @@
           	</div>
          	</br>
         </div>
-	</div>
+    </div>
 
 	<script data-main="laureates" src="lib/require.js"></script>
 </body>
