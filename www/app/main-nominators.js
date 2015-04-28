@@ -5,7 +5,6 @@ define(function (require) {
     var jquery = require('jquery');
     var dc = require('dc');
     var d3 = require('d3');
-    var crossfilter = require('crossfilter');
     var topojson = require('topojson');
     var bubbleOverlay  = require('bubbleOverlay');
     var globalSettings = require('globalSettings');

@@ -1,9 +1,5 @@
 define(function (require) {
 
-	var d3 = require('d3');
-	var dateFormat = d3.time.format('%Y-%m-%d');
-  var numberFormat = d3.format('.2f');
-
   var nominatorFormatter = require('nominatorFormatter');
 
 	function isValid(nominator,property){

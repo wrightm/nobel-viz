@@ -5,14 +5,14 @@ define(function (require) {
     var lastState = "";
     
     function BubbleOverlay(worldChart,datasets) {
-	this.worldChart = worldChart;
-	this.datasets = datasets;
-	this.cityDimension = datasets.cityDimension;
-	this.cityGroup = datasets.cityGroup;
-	this.cityPoints = datasets.cityPoints;
-	this.countryDimension = datasets.countryDimension;
-	this.countryGroup = datasets.countryGroup;
-	this.countryPoints = datasets.countryPoints;
+		this.worldChart = worldChart;
+		this.datasets = datasets;
+		this.cityDimension = datasets.cityDimension;
+		this.cityGroup = datasets.cityGroup;
+		this.cityPoints = datasets.cityPoints;
+		this.countryDimension = datasets.countryDimension;
+		this.countryGroup = datasets.countryGroup;
+		this.countryPoints = datasets.countryPoints;
     };
     
     
@@ -44,7 +44,7 @@ define(function (require) {
 		})
 		.title(function(p) {
 		    return settings.message +": "+ p.key + "\n" +
-			"laureates: " + p.value;
+			settings.name+": " + p.value;
 		})
 		.label(function(p){
 		    return p.value;

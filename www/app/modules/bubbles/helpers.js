@@ -43,7 +43,8 @@ define(function () {
               fontSize : "10px",
               width : 1300,
               height : 500,
-              message : "Country"
+              message : "Country",
+              name : "Laureates"
             };
             return settings;
           } else if(scale >= 1.5 && scale < 3) {
@@ -53,7 +54,8 @@ define(function () {
               fontSize : "8px",
               width : 1300,
               height : 500,
-              message : "Country"
+              message : "Country",
+              name : "Laureates"
             };
             return settings;
           } else if(scale >= 3 && scale < 4) {
@@ -63,7 +65,8 @@ define(function () {
               fontSize : "5px",
               width : 1300,
               height : 500,
-              message : "Country"
+              message : "Country",
+              name : "Laureates"
             };
             return settings;
           } else if(scale >= 4 && scale < 7) {
@@ -73,7 +76,8 @@ define(function () {
               fontSize : "5px",
               width : 1300,
               height : 500,
-              message : "Country"
+              message : "Country",
+              name : "Laureates"
             };
             return settings;
           }
@@ -85,7 +89,8 @@ define(function () {
               fontSize : "1px",
               width : 1300,
               height : 500,
-              message : "City"
+              message : "City",
+              name : "Laureates"
             };
             return settings;
           } else {
@@ -95,7 +100,8 @@ define(function () {
               fontSize : "1px",
               width : 1300,
               height : 500,
-              message : "City"
+              message : "City",
+              name : "Laureates"
             };
             return settings;
           }
@@ -111,7 +117,8 @@ define(function () {
               fontSize : "10px",
               width : 1300,
               height : 500,
-              message : "Country"
+              message : "Country",
+              name : "Nominators"
             };
             return settings;
           } else if(scale >= 1.5 && scale < 3) {
@@ -121,7 +128,8 @@ define(function () {
               fontSize : "8px",
               width : 1300,
               height : 500,
-              message : "Country"
+              message : "Country",
+              name : "Nominators"
             };
             return settings;
           } else if(scale >= 3 && scale < 4) {
@@ -131,7 +139,8 @@ define(function () {
               fontSize : "3px",
               width : 1300,
               height : 500,
-              message : "Country"
+              message : "Country",
+              name : "Nominators"
             };
             return settings;
           } else if(scale >= 4 && scale < 7) {
@@ -141,7 +150,8 @@ define(function () {
               fontSize : "2px",
               width : 1300,
               height : 500,
-              message : "Country"
+              message : "Country",
+              name : "Nominators"
             };
             return settings;
           }
@@ -153,7 +163,8 @@ define(function () {
               fontSize : "1px",
               width : 1300,
               height : 500,
-              message : "City"
+              message : "City",
+              name : "Nominators"
             };
             return settings;
           } else {
@@ -163,7 +174,8 @@ define(function () {
               fontSize : "1px",
               width : 1300,
               height : 500,
-              message : "City"
+              message : "City",
+              name : "Nominators"
             };
             return settings;
           }
@@ -179,7 +191,8 @@ define(function () {
               fontSize : "8px",
               width : 1300,
               height : 500,
-              message : "Country"
+              message : "Country",
+              name : "Nominees"
             };
             return settings;
           } else if(scale >= 1.5 && scale < 3) {
@@ -189,7 +202,8 @@ define(function () {
               fontSize : "5px",
               width : 1300,
               height : 500,
-              message : "Country"
+              message : "Country",
+              name : "Nominees"
             };
             return settings;
           } else if(scale >= 3 && scale < 4) {
@@ -199,7 +213,8 @@ define(function () {
               fontSize : "3px",
               width : 1300,
               height : 500,
-              message : "Country"
+              message : "Country",
+              name : "Nominees"
             };
             return settings;
           } else if(scale >= 4 && scale < 7) {
@@ -209,7 +224,8 @@ define(function () {
               fontSize : "2px",
               width : 1300,
               height : 500,
-              message : "Country"
+              message : "Country",
+              name : "Nominees"
             };
             return settings;
           }
@@ -221,7 +237,8 @@ define(function () {
               fontSize : "1px",
               width : 1300,
               height : 500,
-              message : "City"
+              message : "City",
+              name : "Nominees"
             };
             return settings;
           } else {
@@ -231,7 +248,8 @@ define(function () {
               fontSize : "1px",
               width : 1300,
               height : 500,
-              message : "City"
+              message : "City",
+              name : "Nominees"
             };
             return settings;
           }

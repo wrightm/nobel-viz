@@ -1,4 +1,24 @@
 define( function() {
+
+	var self = this;
+	self.getFilteredParams = getParams;
+	self.filterURLParams = filterParams;
+	self.updateURL = updateURL;
+	self.generateURLQuery = generateURLQuery;
+	self.addURLFilteringToChart = addURLFilteringToChart;
+
+	return {	
+		getFilteredParams: self.getFilteredParams,
+		
+		filterURLParams: self.filterURLParams,
+
+		updateURL: self.updateURL,
+		
+		generateURLQuery: self.generateURLQuery,
+		
+		addURLFilteringToChart: self.addURLFilteringToChart
+    };
+
     /**
      * Updates the URL filters based on the given urlString and the filters passed.
      *
@@ -69,15 +89,4 @@ define( function() {
 		return urlParams;
 	}
 	    
-	return {	
-		getFilteredParams: getParams,
-		
-		filterURLParams: filterParams,
-
-		updateURL: updateURL,
-		
-		generateURLQuery: generateURLQuery,
-		
-		addURLFilteringToChart: addURLFilteringToChart
-    };
 });
