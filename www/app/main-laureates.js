@@ -28,8 +28,6 @@ define(function (require) {
     
     var g = globalSettings.g();
     
-    var clicked = globalSettings.clicked();
-    
     var laureatesCharts = new LaureatesCharts();
     var maleOrFemaleChart = laureatesCharts.maleOrFemaleChart();
     var yearOfBirthChart = laureatesCharts.yearOfBirthChart();
@@ -43,8 +41,7 @@ define(function (require) {
             .data(topojson.feature(world, world.objects.countries).features)
             .enter().append("path")
             .attr("d", path)
-            .attr("class", "feature")
-            .on("click", clicked);
+            .attr("class", "feature");
 	   g.append("path")
             .datum(topojson.mesh(world, world.objects.countries, function(a, b) { return a !== b; }))
             .attr("class", "border border--state")
