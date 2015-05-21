@@ -50,8 +50,6 @@ define(function (require) {
         d3.json("/data/laureates.json", function(error, data) {
             d3.json("/data/lats-lons.json", function(error, latsAndLons) {
 	    
-        	    data = laureateSettings.validate(data,latsAndLons);
-        	    
         	    var laureatesCrossfilters = new LaureatesCrossfilters(data,latsAndLons,projection);
         	    var laureates = laureatesCrossfilters.getLaureates();
         	    var laureatesAll = laureatesCrossfilters.getAll();

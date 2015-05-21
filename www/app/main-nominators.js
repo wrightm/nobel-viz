@@ -53,8 +53,6 @@ define(function (require) {
 	    
 	    d3.json("/data/lats-lons.json", function(error, latsAndLons) {
 		
-    		data = nominatorSettings.validate(data,latsAndLons);
-    		
     		var nominatorCrossfilters = new NominatorCrossfilters(data,latsAndLons,projection);
     		var nominators = nominatorCrossfilters.getNominators();
     		var nominatorsAll = nominatorCrossfilters.getAll();

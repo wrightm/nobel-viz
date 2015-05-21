@@ -1,6 +1,7 @@
 define(function (require) {
 
 	var crossfilter = require('crossfilter');
+	var nominatorFormatter = require('nominatorFormatter');
 
 	function NominatorCrossfilters(nominators,latsAndLons,projection){
 		this.nominators = crossfilter(nominators);
@@ -53,7 +54,15 @@ define(function (require) {
 
 		// male or female
 		var gender = nominators.dimension(function (d) {
-			return d.gender === "M" ? 'Male' : 'Female';
+			if(d.gender === "M"){
+				return "Male";
+			}
+			else if(d.gender === "F"){
+				return "Female";
+			}
+			else {
+				return "Unknown";
+			}
 		});
 		var genderGroup = gender.group();
 
@@ -61,7 +70,8 @@ define(function (require) {
 		groups["gender"] = genderGroup;
 
 		var prize = nominators.dimension(function(d){
-			return d.prize;
+			var formattedPrize = nominatorFormatter.formatPrizeString(d.prize);
+			return formattedPrize;
 		});
 		var prizeGroup = prize.group();
 
@@ -69,7 +79,8 @@ define(function (require) {
 		groups["prize"] = prizeGroup;
 
 		var city =  nominators.dimension(function (d) {
-			return d.city;
+			var formattedCity = nominatorFormatter.formatCityString(d.city);
+			return formattedCity;
 		});
 		var cityGroup = city.group();
 
@@ -77,7 +88,8 @@ define(function (require) {
 		groups["city"] = cityGroup;
 
 		var country = nominators.dimension(function(d){
-			return d.country;
+			var formattedCountry = nominatorFormatter.formatCountryString(d.country);
+			return formattedCountry;
 		});
 		var countryGroup = country.group();
 

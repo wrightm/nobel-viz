@@ -104,8 +104,8 @@ define(function (require) {
 
 	function setupYearOfBirthChart(nomineesDimensions,nomineesGroups){
         
-        var minYearOfBirth = new Date(Number(nomineesDimensions.yearOfBirth.bottom(1)[0].dateOfBirth),0,1);
-        var maxYearOfBirth = new Date(Number(nomineesDimensions.yearOfBirth.top(1)[0].dateOfBirth),0,1);
+        var minYearOfBirth = new Date(1820,0,1);
+        var maxYearOfBirth = new Date(1930,0,1);
 
 		yearOfBirthChart
         .width(990)
@@ -120,6 +120,8 @@ define(function (require) {
         .round(d3.time.year.round)
         .alwaysUseRounding(true)
         .xUnits(d3.time.years);
+
+        yearOfBirthChart.yAxis().ticks(0);
 	};
 
     function setupNominatorYearChartChart(nomineesDimensions,nomineesGroups){
@@ -138,6 +140,8 @@ define(function (require) {
         .round(d3.time.year.round)
         .alwaysUseRounding(true)
         .xUnits(d3.time.years);
+
+        nominatorYearChart.yAxis().ticks(0);
     };
 
 	return NomineesCharts;

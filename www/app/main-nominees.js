@@ -55,8 +55,6 @@ define(function (require) {
 	    
 	     d3.json("/data/lats-lons.json", function(error, latsAndLons) {
 		
-    		data = nomineesSettings.validate(data,latsAndLons);
-    		
     		var nomineesCrossfilters = new NomineesCrossfilters(data,latsAndLons,projection);
     		var nominees = nomineesCrossfilters.getNominators();
     		var nomineesAll = nomineesCrossfilters.getAll();
