@@ -83,6 +83,7 @@ define(function (require) {
 	function setupYearOfBirthChartChart(laureatesDimensions,laureatesGroups){
 		var minYearOfBirth = new Date(1820,0,1);
         var maxYearOfBirth = new Date(Number(laureatesDimensions.yearOfBirth.top(1)[0].dateOfBirth),0,1);
+        
         yearOfBirthChart
         .width(990)
         .height(40)

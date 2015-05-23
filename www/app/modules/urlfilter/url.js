@@ -31,7 +31,8 @@ define( function() {
 				}
 		    }
 		}
-		history.replaceState({}, "", urlString + "?" + generateURLQuery(filters));		    
+		var url = urlString + "?" + generateURLQuery(filters);
+		history.replaceState({}, "", url);		    
     }
 
     /**
@@ -51,14 +52,15 @@ define( function() {
 	    var queryString = ''
 	    var first = true;
 	    Object.keys(currentFilters).forEach(function(key) {
-		if (first) {
-		    first = false;
-		} else {
-		    queryString += '&';
-		}
-		queryString += key + '=' + currentFilters[key];
+			if (first) {
+			    first = false;
+			} else {
+			    queryString += '&';
+			}
+			var filter = currentFilters[key];
+			var newFilter = validateIfDate(filter);
+			queryString += key + '=' + newFilter;
 	    });
-	    
 	    return queryString;
 	}
 
@@ -87,6 +89,22 @@ define( function() {
 		}
 		
 		return urlParams;
+	}
+
+	function validateIfDate(filter){
+		if(!filter){
+			return filter;
+		}
+		if(filter[0].length == 2){
+			if(isDate(filter[0][0]) && isDate(filter[0][1])){
+				return [encodeURIComponent(filter[0][0]),encodeURIComponent(filter[0][1])];
+			}
+		}
+		return filter;
+	}
+
+	function isDate(date){
+		return Object.prototype.toString.call(date) === '[object Date]';
 	}
 	    
 });
