@@ -52,6 +52,7 @@ define(function (require) {
 
 		return svg;
   	};
+  	
 
   	function buildZoom(){
 		var zoom = d3.behavior.zoom()
