@@ -57,7 +57,7 @@ define(function (require) {
 		var zoom = d3.behavior.zoom()
 	      .translate([0, 0])
 	      .scale(1)
-	      .scaleExtent([1, 12])
+	      .scaleExtent([1, 6])
 	      .on("zoom", zoomed);
 
     	return zoom;
